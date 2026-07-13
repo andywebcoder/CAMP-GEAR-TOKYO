@@ -15,6 +15,7 @@
         "store_1": {
           "type": "store",
           "settings": {
+            "image": "shopify://shop_images/jimmy-funkhouser-xXh9nC_7c7U-unsplash.jpg",
             "tag": "旗艦店",
             "name": "CAMP GEAR TOKYO 渋谷店",
             "address": "東京都渋谷区神南1-2-3",
@@ -61,7 +62,12 @@
           }
         }
       },
-      "block_order": ["store_1", "store_2", "store_3", "store_4"],
+      "block_order": [
+        "store_1",
+        "store_2",
+        "store_3",
+        "store_4"
+      ],
       "settings": {
         "heading": "STORE LOCATIONS",
         "subheading": "全国のCAMP GEAR TOKYO 店舗一覧",
@@ -71,5 +77,7 @@
       }
     }
   },
-  "order": ["store_locations"]
+  "order": [
+    "store_locations"
+  ]
 }
