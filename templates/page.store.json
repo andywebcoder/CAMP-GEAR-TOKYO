@@ -15,8 +15,7 @@
         "store_1": {
           "type": "store",
           "settings": {
-            "image": "shopify://shop_images/jimmy-funkhouser-xXh9nC_7c7U-unsplash.jpg",
-            "tag": "旗艦店",
+            "categories": "テント,調理器具,チェア",
             "name": "CAMP GEAR TOKYO 渋谷店",
             "address": "東京都渋谷区神南1-2-3",
             "hours": "11:00〜21:00",
@@ -28,7 +27,7 @@
         "store_2": {
           "type": "store",
           "settings": {
-            "tag": "駅チカ",
+            "categories": "寝袋,マット,バックパック",
             "name": "CAMP GEAR TOKYO 新宿店",
             "address": "東京都新宿区西新宿2-4-5",
             "hours": "10:00〜21:00",
@@ -40,7 +39,7 @@
         "store_3": {
           "type": "store",
           "settings": {
-            "tag": "大型店",
+            "categories": "テント,タープ,テーブル",
             "name": "CAMP GEAR TOKYO 横浜店",
             "address": "神奈川県横浜市西区みなとみらい3-6-7",
             "hours": "10:00〜20:00",
@@ -52,7 +51,7 @@
         "store_4": {
           "type": "store",
           "settings": {
-            "tag": "アウトレット",
+            "categories": "調理器具,チェア,テーブル",
             "name": "CAMP GEAR TOKYO 千葉店",
             "address": "千葉県千葉市美浜区中瀬1-8-9",
             "hours": "10:00〜20:00",

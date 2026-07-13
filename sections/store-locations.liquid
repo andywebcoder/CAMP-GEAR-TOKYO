@@ -52,8 +52,16 @@
           {%- endif -%}
 
           <div class="store-card__body">
-            {%- if block.settings.tag != blank -%}
-              <span class="store-card__tag">{{ block.settings.tag | escape }}</span>
+            {%- if block.settings.categories != blank -%}
+              <div class="store-card__tags">
+                {%- assign cats = block.settings.categories | split: ',' -%}
+                {%- for cat in cats -%}
+                  {%- assign cat_trimmed = cat | strip -%}
+                  {%- if cat_trimmed != blank -%}
+                    <span class="store-card__tag">{{ cat_trimmed | escape }}</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
             {%- endif -%}
             <h3 class="store-card__name">
               <a href="{{ block.settings.link }}">{{ block.settings.name | escape }}</a>
@@ -131,14 +139,21 @@
     padding-top: 1.6rem;
   }
 
+  .store-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
   .store-card__tag {
     display: inline-block;
     font-size: 1.1rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     padding: 0.3rem 0.9rem;
-    background: rgb(var(--color-foreground));
-    color: rgb(var(--color-background));
-    margin-bottom: 1rem;
+    background: rgba(var(--color-foreground), 0.06);
+    color: rgba(var(--color-foreground), 0.75);
+    border: 1px solid rgba(var(--color-foreground), 0.12);
   }
 
   .store-card__name {
@@ -239,7 +254,7 @@
       "name": "店舗",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "店舗画像" },
-        { "type": "text", "id": "tag", "label": "タグ（例：旗艦店）" },
+        { "type": "text", "id": "categories", "label": "取扱いアイテム（カンマ区切り）", "default": "テント,調理器具,チェア", "info": "カンマ区切りで複数タグを表示（例：テント,寝袋,調理器具）" },
         { "type": "text", "id": "name", "label": "店舗名", "default": "CAMP GEAR TOKYO 〇〇店" },
         { "type": "text", "id": "address", "label": "住所", "default": "東京都〇〇区〇〇 1-2-3" },
         { "type": "text", "id": "hours", "label": "営業時間", "default": "10:00〜20:00" },
