@@ -119,8 +119,15 @@
     }
   }
 
+  .store-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .store-card__media {
     display: block;
+    flex-shrink: 0;
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: rgba(var(--color-foreground), 0.04);
@@ -140,6 +147,9 @@
 
   .store-card__body {
     padding-top: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
   }
 
   .store-card__name {
@@ -169,7 +179,8 @@
     background: rgba(var(--color-foreground), 0.05);
     padding: 1.2rem 1.4rem;
     margin-bottom: 1.4rem;
-    min-height: 9.6rem;
+    /* カード内の余白を埋めて、同じ行のボックス高さを自動で揃える */
+    flex: 1 1 auto;
   }
 
   .store-card__hours-label {
