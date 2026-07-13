@@ -1,0 +1,264 @@
+{%- comment -%}
+  店舗一覧セクション（STORE LOCATIONS）
+  各店舗＝ブロック（テーマエディタで編集可能）
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="store-locations__head">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="store-locations__title">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="store-locations__subtitle">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="store-locations__grid">
+      {%- for block in section.blocks -%}
+        <div class="store-card" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <a href="{{ block.settings.link }}" class="store-card__media">
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w"
+                sizes="(min-width: 750px) 45vw, 90vw"
+                alt="{{ block.settings.name | escape }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+              >
+            </a>
+          {%- else -%}
+            <a href="{{ block.settings.link }}" class="store-card__media store-card__media--placeholder">
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            </a>
+          {%- endif -%}
+
+          <div class="store-card__body">
+            {%- if block.settings.tag != blank -%}
+              <span class="store-card__tag">{{ block.settings.tag | escape }}</span>
+            {%- endif -%}
+            <h3 class="store-card__name">
+              <a href="{{ block.settings.link }}">{{ block.settings.name | escape }}</a>
+            </h3>
+            {%- if block.settings.address != blank -%}
+              <p class="store-card__row"><span class="store-card__label">住所</span>{{ block.settings.address | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.hours != blank -%}
+              <p class="store-card__row"><span class="store-card__label">営業時間</span>{{ block.settings.hours | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.phone != blank -%}
+              <p class="store-card__row"><span class="store-card__label">TEL</span>{{ block.settings.phone | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.link != blank and block.settings.link_label != blank -%}
+              <a href="{{ block.settings.link }}" class="store-card__link">
+                {{ block.settings.link_label | escape }}
+                <span class="store-card__arrow" aria-hidden="true">→</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .store-locations__head {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .store-locations__title {
+    margin: 0 0 1rem;
+    letter-spacing: 0.08em;
+  }
+
+  .store-locations__subtitle {
+    margin: 0;
+    color: rgba(var(--color-foreground), 0.65);
+  }
+
+  .store-locations__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem 2.4rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-locations__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .store-card__media {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.04);
+  }
+
+  .store-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .store-card__media:hover img {
+    transform: scale(1.04);
+  }
+
+  .store-card__body {
+    padding-top: 1.6rem;
+  }
+
+  .store-card__tag {
+    display: inline-block;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.9rem;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    margin-bottom: 1rem;
+  }
+
+  .store-card__name {
+    margin: 0 0 1.2rem;
+    font-size: 1.9rem;
+  }
+
+  .store-card__name a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .store-card__row {
+    display: flex;
+    gap: 1rem;
+    margin: 0.4rem 0;
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground), 0.8);
+  }
+
+  .store-card__label {
+    flex-shrink: 0;
+    width: 5em;
+    color: rgba(var(--color-foreground), 0.5);
+  }
+
+  .store-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #f97316;
+  }
+
+  .store-card__link:hover .store-card__arrow {
+    transform: translateX(4px);
+  }
+
+  .store-card__arrow {
+    transition: transform 0.2s ease;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "店舗一覧",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し",
+      "default": "STORE LOCATIONS"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "サブ見出し",
+      "default": "全国のキャンプギア東京 店舗一覧"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "カラースキーム",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "余白"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "上の余白",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "下の余白",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "店舗",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "店舗画像" },
+        { "type": "text", "id": "tag", "label": "タグ（例：旗艦店）" },
+        { "type": "text", "id": "name", "label": "店舗名", "default": "CAMP GEAR TOKYO 〇〇店" },
+        { "type": "text", "id": "address", "label": "住所", "default": "東京都〇〇区〇〇 1-2-3" },
+        { "type": "text", "id": "hours", "label": "営業時間", "default": "10:00〜20:00" },
+        { "type": "text", "id": "phone", "label": "電話番号", "default": "03-0000-0000" },
+        { "type": "url", "id": "link", "label": "詳細ページへのリンク" },
+        { "type": "text", "id": "link_label", "label": "リンクの文言", "default": "店舗詳細を見る" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "店舗一覧",
+      "blocks": [
+        { "type": "store" },
+        { "type": "store" },
+        { "type": "store" },
+        { "type": "store" }
+      ]
+    }
+  ]
+}
+{% endschema %}

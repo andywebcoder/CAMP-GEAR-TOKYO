@@ -1,0 +1,355 @@
+{%- comment -%}
+  店舗詳細セクション（STORE-detail）
+  店舗情報・アクセス（settings）＋ 専門スタッフ・店内ギャラリー（blocks）
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #StoreHero-{{ section.id }} {
+    {%- if section.settings.hero_image != blank -%}
+      background-image: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url({{ section.settings.hero_image | image_url: width: 2000 }});
+    {%- else -%}
+      background-color: #2b2f3a;
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+
+    {%- comment -%} 店舗名ヒーロー {%- endcomment -%}
+    <div class="store-detail__hero" id="StoreHero-{{ section.id }}">
+      <div class="store-detail__hero-inner">
+        {%- if section.settings.tag != blank -%}
+          <span class="store-detail__hero-tag">{{ section.settings.tag | escape }}</span>
+        {%- endif -%}
+        <h1 class="store-detail__hero-title">{{ section.settings.store_name | escape }}</h1>
+        {%- if section.settings.tagline != blank -%}
+          <p class="store-detail__hero-tagline">{{ section.settings.tagline | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} 店舗情報 ＋ アクセス {%- endcomment -%}
+    <div class="store-detail__cols">
+      <div class="store-detail__info">
+        <h2 class="store-detail__subtitle">店舗情報</h2>
+        <dl class="store-detail__table">
+          {%- if section.settings.address != blank -%}<div><dt>住所</dt><dd>{{ section.settings.address | escape }}</dd></div>{%- endif -%}
+          {%- if section.settings.hours != blank -%}<div><dt>営業時間</dt><dd>{{ section.settings.hours | escape }}</dd></div>{%- endif -%}
+          {%- if section.settings.holiday != blank -%}<div><dt>定休日</dt><dd>{{ section.settings.holiday | escape }}</dd></div>{%- endif -%}
+          {%- if section.settings.phone != blank -%}<div><dt>電話</dt><dd>{{ section.settings.phone | escape }}</dd></div>{%- endif -%}
+          {%- if section.settings.parking != blank -%}<div><dt>駐車場</dt><dd>{{ section.settings.parking | escape }}</dd></div>{%- endif -%}
+        </dl>
+      </div>
+
+      <div class="store-detail__access">
+        <h2 class="store-detail__subtitle">アクセス</h2>
+        <div class="store-detail__map">
+          {%- if section.settings.map_embed != blank -%}
+            {{ section.settings.map_embed }}
+          {%- else -%}
+            <div class="store-detail__map-placeholder">地図（管理画面で埋め込みコードを設定）</div>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.access_text != blank -%}
+          <p class="store-detail__access-text">{{ section.settings.access_text | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} 専門スタッフ {%- endcomment -%}
+    {%- assign staff_blocks = section.blocks | where: 'type', 'staff' -%}
+    {%- if staff_blocks.size > 0 -%}
+      <div class="store-detail__block">
+        <h2 class="store-detail__subtitle store-detail__subtitle--center">専門スタッフ</h2>
+        <div class="store-detail__staff">
+          {%- for block in staff_blocks -%}
+            <div class="staff-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <img class="staff-card__img" src="{{ block.settings.image | image_url: width: 200 }}" alt="{{ block.settings.name | escape }}" width="100" height="100" loading="lazy">
+              {%- endif -%}
+              <p class="staff-card__name">{{ block.settings.name | escape }}</p>
+              {%- if block.settings.role != blank -%}<p class="staff-card__role">{{ block.settings.role | escape }}</p>{%- endif -%}
+              {%- if block.settings.comment != blank -%}<p class="staff-card__comment">{{ block.settings.comment | escape }}</p>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 店内ギャラリー {%- endcomment -%}
+    {%- assign gallery_blocks = section.blocks | where: 'type', 'gallery' -%}
+    {%- if gallery_blocks.size > 0 -%}
+      <div class="store-detail__block">
+        <h2 class="store-detail__subtitle store-detail__subtitle--center">店内ギャラリー</h2>
+        <div class="store-detail__gallery">
+          {%- for block in gallery_blocks -%}
+            <div class="store-detail__gallery-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.caption | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy">
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .store-detail__hero {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 6rem 3rem;
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .store-detail__hero-tag {
+    display: inline-block;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    margin-bottom: 1.4rem;
+  }
+
+  .store-detail__hero-title {
+    margin: 0;
+    color: #fff;
+  }
+
+  .store-detail__hero-tagline {
+    margin: 1rem 0 0;
+    opacity: 0.9;
+  }
+
+  .store-detail__cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-detail__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .store-detail__subtitle {
+    font-size: 1.8rem;
+    margin: 0 0 1.6rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #f97316;
+    display: inline-block;
+  }
+
+  .store-detail__subtitle--center {
+    display: block;
+    text-align: center;
+    border-bottom: none;
+    margin-bottom: 3rem;
+  }
+
+  .store-detail__table {
+    margin: 0;
+  }
+
+  .store-detail__table > div {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    font-size: 1.4rem;
+  }
+
+  .store-detail__table dt {
+    flex-shrink: 0;
+    width: 6em;
+    color: rgba(var(--color-foreground), 0.55);
+    margin: 0;
+  }
+
+  .store-detail__table dd {
+    margin: 0;
+  }
+
+  .store-detail__map {
+    aspect-ratio: 4 / 3;
+    background: rgba(var(--color-foreground), 0.06);
+    overflow: hidden;
+  }
+
+  .store-detail__map :is(iframe, img) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .store-detail__map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(var(--color-foreground), 0.5);
+    font-size: 1.3rem;
+  }
+
+  .store-detail__access-text {
+    margin: 1.4rem 0 0;
+    font-size: 1.4rem;
+    line-height: 1.8;
+  }
+
+  .store-detail__block {
+    margin-top: 5rem;
+  }
+
+  .store-detail__staff {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-detail__staff {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .staff-card {
+    text-align: center;
+    padding: 2.4rem 1.6rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .staff-card__img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.4rem;
+  }
+
+  .staff-card__name {
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+  }
+
+  .staff-card__role {
+    font-size: 1.3rem;
+    color: #f97316;
+    margin: 0 0 1rem;
+  }
+
+  .staff-card__comment {
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin: 0;
+    line-height: 1.7;
+  }
+
+  .store-detail__gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .store-detail__gallery {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .store-detail__gallery-item {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.04);
+  }
+
+  .store-detail__gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "店舗詳細",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "tag", "label": "タグ（例：旗艦店）", "default": "旗艦店" },
+    { "type": "text", "id": "store_name", "label": "店舗名", "default": "CAMP GEAR TOKYO 渋谷店" },
+    { "type": "text", "id": "tagline", "label": "キャッチコピー", "default": "都市型フラッグシップストア" },
+    { "type": "image_picker", "id": "hero_image", "label": "ヒーロー背景画像" },
+    { "type": "header", "content": "店舗情報" },
+    { "type": "text", "id": "address", "label": "住所", "default": "東京都渋谷区神南1-2-3" },
+    { "type": "text", "id": "hours", "label": "営業時間", "default": "11:00〜21:00" },
+    { "type": "text", "id": "holiday", "label": "定休日", "default": "年中無休" },
+    { "type": "text", "id": "phone", "label": "電話", "default": "03-1111-1111" },
+    { "type": "text", "id": "parking", "label": "駐車場", "default": "提携駐車場あり" },
+    { "type": "header", "content": "アクセス" },
+    { "type": "html", "id": "map_embed", "label": "地図の埋め込みコード（Googleマップのiframe等）" },
+    { "type": "textarea", "id": "access_text", "label": "アクセス説明", "default": "JR渋谷駅ハチ公口より徒歩5分。" },
+    { "type": "header", "content": "余白" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "上の余白", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "下の余白", "default": 60 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "カラースキーム", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "staff",
+      "name": "スタッフ",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "写真" },
+        { "type": "text", "id": "name", "label": "名前", "default": "山田 太郎" },
+        { "type": "text", "id": "role", "label": "役職・担当", "default": "店長 / テント担当" },
+        { "type": "textarea", "id": "comment", "label": "ひとこと", "default": "ギア選びはお任せください！" }
+      ]
+    },
+    {
+      "type": "gallery",
+      "name": "ギャラリー画像",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "画像" },
+        { "type": "text", "id": "caption", "label": "代替テキスト" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "店舗詳細",
+      "blocks": [
+        { "type": "staff" },
+        { "type": "staff" },
+        { "type": "staff" },
+        { "type": "gallery" },
+        { "type": "gallery" },
+        { "type": "gallery" },
+        { "type": "gallery" }
+      ]
+    }
+  ]
+}
+{% endschema %}

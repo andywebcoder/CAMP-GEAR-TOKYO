@@ -1,0 +1,50 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "store_detail": {
+      "type": "store-detail",
+      "blocks": {
+        "staff_1": {
+          "type": "staff",
+          "settings": { "name": "山田 太郎", "role": "店長 / テント担当", "comment": "初めてのキャンプも全力でサポートします！" }
+        },
+        "staff_2": {
+          "type": "staff",
+          "settings": { "name": "佐藤 花子", "role": "寝袋・マット担当", "comment": "快適な睡眠のためのギア選び、ご相談ください。" }
+        },
+        "staff_3": {
+          "type": "staff",
+          "settings": { "name": "鈴木 一郎", "role": "調理器具担当", "comment": "アウトドア料理のことなら何でも聞いてください。" }
+        },
+        "gallery_1": { "type": "gallery", "settings": {} },
+        "gallery_2": { "type": "gallery", "settings": {} },
+        "gallery_3": { "type": "gallery", "settings": {} },
+        "gallery_4": { "type": "gallery", "settings": {} }
+      },
+      "block_order": ["staff_1", "staff_2", "staff_3", "gallery_1", "gallery_2", "gallery_3", "gallery_4"],
+      "settings": {
+        "tag": "旗艦店",
+        "store_name": "CAMP GEAR TOKYO 渋谷店",
+        "tagline": "都市型フラッグシップストア",
+        "address": "東京都渋谷区神南1-2-3",
+        "hours": "11:00〜21:00",
+        "holiday": "年中無休",
+        "phone": "03-1111-1111",
+        "parking": "提携駐車場あり",
+        "access_text": "JR渋谷駅ハチ公口より徒歩5分。井の頭通り沿い。",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": ["store_detail"]
+}

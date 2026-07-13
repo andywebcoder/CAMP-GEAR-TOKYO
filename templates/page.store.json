@@ -1,0 +1,75 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "store_locations": {
+      "type": "store-locations",
+      "blocks": {
+        "store_1": {
+          "type": "store",
+          "settings": {
+            "tag": "旗艦店",
+            "name": "CAMP GEAR TOKYO 渋谷店",
+            "address": "東京都渋谷区神南1-2-3",
+            "hours": "11:00〜21:00",
+            "phone": "03-1111-1111",
+            "link": "/pages/store-detail",
+            "link_label": "店舗詳細を見る"
+          }
+        },
+        "store_2": {
+          "type": "store",
+          "settings": {
+            "tag": "駅チカ",
+            "name": "CAMP GEAR TOKYO 新宿店",
+            "address": "東京都新宿区西新宿2-4-5",
+            "hours": "10:00〜21:00",
+            "phone": "03-2222-2222",
+            "link": "/pages/store-detail",
+            "link_label": "店舗詳細を見る"
+          }
+        },
+        "store_3": {
+          "type": "store",
+          "settings": {
+            "tag": "大型店",
+            "name": "CAMP GEAR TOKYO 横浜店",
+            "address": "神奈川県横浜市西区みなとみらい3-6-7",
+            "hours": "10:00〜20:00",
+            "phone": "045-3333-3333",
+            "link": "/pages/store-detail",
+            "link_label": "店舗詳細を見る"
+          }
+        },
+        "store_4": {
+          "type": "store",
+          "settings": {
+            "tag": "アウトレット",
+            "name": "CAMP GEAR TOKYO 千葉店",
+            "address": "千葉県千葉市美浜区中瀬1-8-9",
+            "hours": "10:00〜20:00",
+            "phone": "043-4444-4444",
+            "link": "/pages/store-detail",
+            "link_label": "店舗詳細を見る"
+          }
+        }
+      },
+      "block_order": ["store_1", "store_2", "store_3", "store_4"],
+      "settings": {
+        "heading": "STORE LOCATIONS",
+        "subheading": "全国のCAMP GEAR TOKYO 店舗一覧",
+        "color_scheme": "scheme-1",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": ["store_locations"]
+}
