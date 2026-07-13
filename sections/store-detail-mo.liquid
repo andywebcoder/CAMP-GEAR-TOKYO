@@ -1,0 +1,167 @@
+{%- comment -%}
+  店舗詳細（メタオブジェクト「店舗情報」用）
+  metaobject テンプレートで使用。現在の店舗は {{ metaobject }} で参照。
+{%- endcomment -%}
+
+{%- assign store = metaobject -%}
+
+{%- style -%}
+  #StoreHero-{{ section.id }} {
+    {%- if store.image.value != blank -%}
+      background-image: linear-gradient(90deg, rgba(20,22,28,0.9), rgba(20,22,28,0.5)), url({{ store.image.value | image_url: width: 2000 }});
+    {%- else -%}
+      background: linear-gradient(90deg, #23262e, #3a3f4a);
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+
+  <nav class="store-detail__crumbs page-width" aria-label="パンくず">
+    <a href="{{ routes.root_url }}">ホーム</a>
+    <span aria-hidden="true">/</span>
+    <a href="{{ section.settings.list_url | default: '/pages/store' }}">店舗一覧</a>
+    <span aria-hidden="true">/</span>
+    <span class="store-detail__crumbs-current">{{ store.name.value | escape }}</span>
+  </nav>
+
+  <div class="store-detail__hero" id="StoreHero-{{ section.id }}">
+    <div class="page-width">
+      <h1 class="store-detail__hero-title">{{ store.name.value | escape }}</h1>
+      {%- if store.tagline.value != blank -%}
+        <p class="store-detail__hero-tagline">{{ store.tagline.value | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="page-width store-detail__inner">
+    <div class="store-detail__cols">
+
+      <div class="store-info">
+        <h2 class="store-detail__subtitle">店舗情報</h2>
+
+        {%- if store.address.value != blank -%}
+          <div class="store-info__item">
+            <p class="store-info__label">所在地</p>
+            <p class="store-info__value">{{ store.address.value | escape }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if store.tel.value != blank -%}
+          <div class="store-info__item">
+            <p class="store-info__label">電話番号</p>
+            <p class="store-info__value">TEL: <a href="tel:{{ store.tel.value | remove: '-' }}">{{ store.tel.value | escape }}</a></p>
+          </div>
+        {%- endif -%}
+
+        {%- if store.hours.value != blank -%}
+          <div class="store-info__item">
+            <p class="store-info__label">営業時間</p>
+            <p class="store-info__value">{{ store.hours.value | escape | newline_to_br }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if store.categories.value != blank -%}
+          <div class="store-info__item">
+            <p class="store-info__label">取扱カテゴリー</p>
+            <div class="store-info__tags">
+              {%- assign cats = store.categories.value | split: ',' -%}
+              {%- for cat in cats -%}
+                {%- assign c = cat | strip -%}
+                {%- if c != blank -%}<span class="store-info__tag">{{ c | escape }}</span>{%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="store-detail__access">
+        <h2 class="store-detail__subtitle">アクセス</h2>
+        <div class="store-detail__map">
+          {%- if store.map.value != blank -%}
+            {{ store.map.value }}
+          {%- else -%}
+            <div class="store-detail__map-placeholder">Google Maps（管理画面で埋め込みコードを設定）</div>
+          {%- endif -%}
+        </div>
+        {%- if store.access.value != blank -%}
+          <p class="store-detail__access-text">{{ store.access.value | escape | newline_to_br }}</p>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .store-detail__crumbs {
+    padding-top: 1.6rem;
+    padding-bottom: 1.6rem;
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.55);
+  }
+  .store-detail__crumbs a { color: inherit; text-decoration: none; }
+  .store-detail__crumbs a:hover { text-decoration: underline; }
+  .store-detail__crumbs span { margin: 0 0.6rem; }
+  .store-detail__crumbs-current { color: rgba(var(--color-foreground), 0.85); }
+
+  .store-detail__hero {
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 5rem 0;
+    margin-bottom: 4rem;
+  }
+  .store-detail__hero-title { margin: 0; color: #fff; }
+  .store-detail__hero-tagline { margin: 1rem 0 0; opacity: 0.9; font-size: 1.4rem; }
+
+  .store-detail__inner { padding-bottom: 6rem; }
+
+  .store-detail__subtitle { font-size: 1.7rem; margin: 0 0 1.6rem; }
+
+  .store-detail__cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media screen and (min-width: 750px) {
+    .store-detail__cols { grid-template-columns: 1.1fr 0.9fr; }
+  }
+
+  .store-info { background: rgba(var(--color-foreground), 0.04); padding: 2.4rem; }
+  .store-info__item { padding: 1.4rem 0; border-bottom: 1px solid rgba(var(--color-foreground), 0.1); }
+  .store-info__item:first-of-type { padding-top: 0; }
+  .store-info__item:last-child { border-bottom: none; padding-bottom: 0; }
+  .store-info__label { margin: 0 0 0.6rem; font-weight: 700; font-size: 1.35rem; color: #f97316; }
+  .store-info__value { margin: 0; font-size: 1.4rem; line-height: 1.8; }
+  .store-info__value a { color: inherit; }
+
+  .store-info__tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .store-info__tag {
+    font-size: 1.15rem;
+    padding: 0.4rem 1rem;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+
+  .store-detail__map { aspect-ratio: 4 / 3; background: rgba(var(--color-foreground), 0.06); overflow: hidden; }
+  .store-detail__map :is(iframe, img) { width: 100%; height: 100%; border: 0; display: block; }
+  .store-detail__map-placeholder {
+    display: flex; align-items: center; justify-content: center; height: 100%;
+    color: rgba(var(--color-foreground), 0.5); font-size: 1.3rem; text-align: center; padding: 2rem;
+  }
+  .store-detail__access-text { margin: 1.6rem 0 0; font-size: 1.4rem; line-height: 1.8; }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "店舗詳細（メタオブジェクト）",
+  "settings": [
+    { "type": "url", "id": "list_url", "label": "店舗一覧ページのURL（パンくず用）", "info": "例：/pages/store" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "カラースキーム", "default": "scheme-1" }
+  ],
+  "presets": [
+    { "name": "店舗詳細（メタオブジェクト）" }
+  ]
+}
+{% endschema %}
