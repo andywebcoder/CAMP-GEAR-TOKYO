@@ -12,36 +12,30 @@
     "store_detail": {
       "type": "store-detail",
       "blocks": {
-        "staff_1": {
-          "type": "staff",
-          "settings": { "name": "山田 太郎", "role": "店長 / テント担当", "comment": "初めてのキャンプも全力でサポートします！" }
-        },
-        "staff_2": {
-          "type": "staff",
-          "settings": { "name": "佐藤 花子", "role": "寝袋・マット担当", "comment": "快適な睡眠のためのギア選び、ご相談ください。" }
-        },
-        "staff_3": {
-          "type": "staff",
-          "settings": { "name": "鈴木 一郎", "role": "調理器具担当", "comment": "アウトドア料理のことなら何でも聞いてください。" }
-        },
-        "gallery_1": { "type": "gallery", "settings": {} },
-        "gallery_2": { "type": "gallery", "settings": {} },
-        "gallery_3": { "type": "gallery", "settings": {} },
-        "gallery_4": { "type": "gallery", "settings": {} }
+        "feature_1": { "type": "feature", "settings": { "icon": "⛺", "title": "テント各種", "description": "有名ブランドのテントを常時50張り以上展示。実物を見て選べます。" } },
+        "feature_2": { "type": "feature", "settings": { "icon": "🪑", "title": "椅子・テーブル類", "description": "アウトドアチェア・テーブルを豊富に取り揃え。座り心地を試せます。" } },
+        "feature_3": { "type": "feature", "settings": { "icon": "🛌", "title": "寝袋・マット類", "description": "オールシーズン対応の寝袋・マットを展示。快眠グッズもご相談ください。" } },
+        "feature_4": { "type": "feature", "settings": { "icon": "☕", "title": "カフェスペース", "description": "アウトドア用品に囲まれたカフェで、コーヒーを飲みながら相談できます。" } }
       },
-      "block_order": ["staff_1", "staff_2", "staff_3", "gallery_1", "gallery_2", "gallery_3", "gallery_4"],
+      "block_order": ["feature_1", "feature_2", "feature_3", "feature_4"],
       "settings": {
-        "tag": "旗艦店",
+        "list_url": "/pages/店舗一覧",
         "store_name": "CAMP GEAR TOKYO 渋谷店",
-        "tagline": "都市型フラッグシップストア",
-        "address": "東京都渋谷区神南1-2-3",
-        "hours": "11:00〜21:00",
-        "holiday": "年中無休",
-        "phone": "03-1111-1111",
-        "parking": "提携駐車場あり",
-        "access_text": "JR渋谷駅ハチ公口より徒歩5分。井の頭通り沿い。",
+        "tagline": "都心最大級の品揃えと専門スタッフがあなたの冒険をサポート",
+        "postal": "150-0041",
+        "address": "東京都渋谷区神南1-12-16",
+        "building": "アップルビル 1F",
+        "tel": "03-1234-5678",
+        "fax": "03-1234-5679",
+        "hours_weekday": "11:00 - 20:00",
+        "hours_weekend": "10:00 - 19:00",
+        "hours_holiday": "10:00 - 19:00",
+        "closed": "年中無休（年末年始を除く）",
+        "categories": "テント・タープ,寝袋・マット,調理器具,ランタン/照明,バックパック,ライト・シューズ",
+        "access_train": "JR渋谷駅ハチ公口より徒歩5分\n東京メトロ各線 渋谷駅 B1出口より徒歩3分",
+        "access_car": "首都高速3号渋谷線 渋谷出口より約5分\n提携駐車場あり（2,000円以上で1時間無料）",
+        "access_bus": "都営バス「渋谷神南」バス停より徒歩1分\n各方面から渋谷駅行き多数運行",
         "color_scheme": "scheme-1",
-        "padding_top": 40,
         "padding_bottom": 60
       }
     }
