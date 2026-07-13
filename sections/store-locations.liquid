@@ -52,6 +52,21 @@
           {%- endif -%}
 
           <div class="store-card__body">
+            <h3 class="store-card__name">
+              <a href="{{ block.settings.link }}">{{ block.settings.name | escape }}</a>
+            </h3>
+            {%- if block.settings.address != blank -%}
+              <p class="store-card__address">{{ block.settings.address | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.phone != blank -%}
+              <p class="store-card__tel">TEL: {{ block.settings.phone | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.hours != blank -%}
+              <div class="store-card__hours">
+                <p class="store-card__hours-label">営業時間</p>
+                <p class="store-card__hours-value">{{ block.settings.hours | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
             {%- if block.settings.categories != blank -%}
               <div class="store-card__tags">
                 {%- assign cats = block.settings.categories | split: ',' -%}
@@ -62,18 +77,6 @@
                   {%- endif -%}
                 {%- endfor -%}
               </div>
-            {%- endif -%}
-            <h3 class="store-card__name">
-              <a href="{{ block.settings.link }}">{{ block.settings.name | escape }}</a>
-            </h3>
-            {%- if block.settings.address != blank -%}
-              <p class="store-card__row"><span class="store-card__label">住所</span>{{ block.settings.address | escape }}</p>
-            {%- endif -%}
-            {%- if block.settings.hours != blank -%}
-              <p class="store-card__row"><span class="store-card__label">営業時間</span>{{ block.settings.hours | escape }}</p>
-            {%- endif -%}
-            {%- if block.settings.phone != blank -%}
-              <p class="store-card__row"><span class="store-card__label">TEL</span>{{ block.settings.phone | escape }}</p>
             {%- endif -%}
             {%- if block.settings.link != blank and block.settings.link_label != blank -%}
               <a href="{{ block.settings.link }}" class="store-card__link">
@@ -139,26 +142,10 @@
     padding-top: 1.6rem;
   }
 
-  .store-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .store-card__tag {
-    display: inline-block;
-    font-size: 1.1rem;
-    letter-spacing: 0.03em;
-    padding: 0.3rem 0.9rem;
-    background: rgba(var(--color-foreground), 0.06);
-    color: rgba(var(--color-foreground), 0.75);
-    border: 1px solid rgba(var(--color-foreground), 0.12);
-  }
-
   .store-card__name {
-    margin: 0 0 1.2rem;
+    margin: 0 0 0.8rem;
     font-size: 1.9rem;
+    font-weight: 700;
   }
 
   .store-card__name a {
@@ -166,18 +153,51 @@
     color: inherit;
   }
 
-  .store-card__row {
-    display: flex;
-    gap: 1rem;
-    margin: 0.4rem 0;
+  .store-card__address {
+    margin: 0 0 0.6rem;
     font-size: 1.4rem;
+    color: rgba(var(--color-foreground), 0.6);
+  }
+
+  .store-card__tel {
+    margin: 0 0 1.4rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .store-card__hours {
+    background: rgba(var(--color-foreground), 0.05);
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .store-card__hours-label {
+    margin: 0 0 0.4rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+
+  .store-card__hours-value {
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.7;
     color: rgba(var(--color-foreground), 0.8);
   }
 
-  .store-card__label {
-    flex-shrink: 0;
-    width: 5em;
-    color: rgba(var(--color-foreground), 0.5);
+  .store-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .store-card__tag {
+    display: inline-block;
+    font-size: 1.2rem;
+    letter-spacing: 0.03em;
+    padding: 0.4rem 1rem;
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
   }
 
   .store-card__link {
@@ -257,7 +277,7 @@
         { "type": "text", "id": "categories", "label": "取扱いアイテム（カンマ区切り）", "default": "テント,調理器具,チェア", "info": "カンマ区切りで複数タグを表示（例：テント,寝袋,調理器具）" },
         { "type": "text", "id": "name", "label": "店舗名", "default": "CAMP GEAR TOKYO 〇〇店" },
         { "type": "text", "id": "address", "label": "住所", "default": "東京都〇〇区〇〇 1-2-3" },
-        { "type": "text", "id": "hours", "label": "営業時間", "default": "10:00〜20:00" },
+        { "type": "textarea", "id": "hours", "label": "営業時間（改行で複数行可）", "default": "平日 11:00〜20:00\n土日祝 10:00〜19:00" },
         { "type": "text", "id": "phone", "label": "電話番号", "default": "03-0000-0000" },
         { "type": "url", "id": "link", "label": "詳細ページへのリンク" },
         { "type": "text", "id": "link_label", "label": "リンクの文言", "default": "店舗詳細を見る" }
