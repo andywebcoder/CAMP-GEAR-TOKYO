@@ -1,19 +1,15 @@
 {%- comment -%}
   店舗詳細（メタオブジェクト「店舗情報」用）
+  metaobject テンプレート（templates/metaobject.store.json）で使用。現在の店舗は {{ metaobject }}。
   レイアウト: パンくず / ヒーロー / 店舗情報（左・連動）＋店舗の特徴（右・設定） / アクセス（下・連動）
-  metaobject テンプレートで使用。現在の店舗は {{ metaobject }} で参照。
 {%- endcomment -%}
 
 {%- assign store = metaobject -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+  .section-{{ section.id }}-padding { padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px; }
   @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+    .section-{{ section.id }}-padding { padding-bottom: {{ section.settings.padding_bottom }}px; }
   }
   #StoreHero-{{ section.id }} {
     {%- if store.image.value != blank -%}
@@ -26,7 +22,6 @@
 
 <div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
 
-  {%- comment -%} パンくず {%- endcomment -%}
   <nav class="store-detail__crumbs page-width" aria-label="パンくず">
     <a href="{{ routes.root_url }}">ホーム</a>
     <span aria-hidden="true">/</span>
@@ -35,7 +30,6 @@
     <span class="store-detail__crumbs-current">{{ store.name.value | escape }}</span>
   </nav>
 
-  {%- comment -%} ヒーロー {%- endcomment -%}
   <div class="store-detail__hero" id="StoreHero-{{ section.id }}">
     <div class="page-width">
       <h1 class="store-detail__hero-title">{{ store.name.value | escape }}</h1>
@@ -46,11 +40,8 @@
   </div>
 
   <div class="page-width store-detail__inner">
-
-    {%- comment -%} 店舗情報（左・連動） ＋ 店舗の特徴（右・設定） {%- endcomment -%}
     <div class="store-detail__cols">
 
-      {%- comment -%} 左：店舗情報カード（メタオブジェクト連動） {%- endcomment -%}
       <div class="store-info">
         <h2 class="store-detail__subtitle">店舗情報</h2>
 
@@ -89,7 +80,6 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} 右：店舗の特徴（セクション設定・全店共通） {%- endcomment -%}
       {%- assign has_feature = false -%}
       {%- if section.settings.f1_title != blank or section.settings.f2_title != blank or section.settings.f3_title != blank or section.settings.f4_title != blank -%}
         {%- assign has_feature = true -%}
@@ -118,7 +108,6 @@
       {%- endif -%}
     </div>
 
-    {%- comment -%} アクセス（下・全幅・連動） {%- endcomment -%}
     <div class="store-detail__access">
       <h2 class="store-detail__subtitle">アクセス</h2>
       <div class="store-detail__map">
@@ -132,7 +121,6 @@
         <p class="store-detail__access-text">{{ store.access.value | escape | newline_to_br }}</p>
       {%- endif -%}
     </div>
-
   </div>
 </div>
 

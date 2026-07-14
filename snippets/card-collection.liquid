@@ -49,6 +49,12 @@
     >
       {%- if card_collection.featured_image -%}
         <div class="card__media">
+          <a
+            href="{{ card_collection.url }}"
+            class="card__media-link"
+            aria-hidden="true"
+            tabindex="-1"
+          >
           <div class="media media--transparent media--hover-effect">
             <img
               srcset="
@@ -74,6 +80,7 @@
               class="motion-reduce"
             >
           </div>
+          </a>
         </div>
       {%- endif -%}
       {%- if card_collection == blank -%}
@@ -97,13 +104,12 @@
                 {%- else -%}
                   {{ 'onboarding.collection_title' | t }}
                 {%- endif -%}
-                {%- if card_collection.description == blank -%}
-                  <span class="icon-wrap">
-                    {{- 'icon-arrow.svg' | inline_asset_content -}}
-                  </span>
-                {%- endif %}
               </a>
             </h3>
+            {% comment %} アイテム数表示 {% endcomment %}
+            {%- if card_collection.products_count > 0 -%}
+              <p class="card__count">{{ card_collection.products_count }}アイテム</p>
+            {%- endif -%}
             {%- if card_collection.description != blank -%}
               <p class="card__caption">
                 {{- card_collection.description | strip_html | truncatewords: 12 -}}
@@ -133,13 +139,11 @@
               {%- else -%}
                 {{ 'onboarding.collection_title' | t }}
               {%- endif -%}
-              {%- if card_collection.featured_image or card_collection.description == blank -%}
-                <span class="icon-wrap">
-                  {{- 'icon-arrow.svg' | inline_asset_content -}}
-                </span>
-              {%- endif %}
             </a>
           </h3>
+          {%- if card_collection.products_count > 0 -%}
+            <p class="card__count">{{ card_collection.products_count }}アイテム</p>
+          {%- endif -%}
           {%- if card_collection.featured_image == null and card_collection.description != blank -%}
             <p class="card__caption">
               {{- card_collection.description | strip_html | truncatewords: 12 -}}
@@ -157,9 +161,6 @@
           <h3 class="card__heading card__heading--placeholder">
             <a role="link" aria-disabled="true" class="full-unstyled-link">
               {{ 'onboarding.collection_title' | t }}
-              <span class="icon-wrap">
-                {{- 'icon-arrow.svg' | inline_asset_content -}}
-              </span>
             </a>
           </h3>
         </div>

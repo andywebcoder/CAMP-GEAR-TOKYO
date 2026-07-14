@@ -27,6 +27,7 @@
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
   {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+  {{ 'customize.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
 {%- if card_product and card_product != empty -%}
   {%- liquid
@@ -104,6 +105,14 @@
                 >
               {%- endif -%}
             </div>
+          </div>
+        {%- endif -%}
+        {% comment %} 商品タグを画像内（左上）に表示 {% endcomment %}
+        {%- if card_product.tags.size > 0 -%}
+          <div class="card__tags">
+            {%- for tag in card_product.tags -%}
+              <span class="card__tag">{{ tag }}</span>
+            {%- endfor -%}
           </div>
         {%- endif -%}
         <div class="card__content">

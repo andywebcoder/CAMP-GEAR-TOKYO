@@ -22,116 +22,113 @@
   id="main-cart-footer"
   data-id="{{ section.id }}"
 >
-  <div class="page-width">
-    <div class="cart__footer isolate section-{{ section.id }}-padding">
-      {%- if settings.show_cart_note -%}
-        <cart-note class="cart__note field">
-          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
-          <textarea
-            class="text-area field__input"
-            name="note"
-            form="cart"
-            id="Cart-note"
-            placeholder="{{ 'sections.cart.note' | t }}"
-          >{{ cart.note }}</textarea>
-        </cart-note>
-      {%- endif -%}
+  <div class="cart-summary section-{{ section.id }}-padding">
+    <div class="cart-summary__card">
+      <h2 class="cart-summary__title">注文内容</h2>
 
-      <div class="cart__blocks">
-        {% for block in section.blocks %}
-          {%- case block.type -%}
-            {%- when '@app' -%}
-              {% render block %}
-            {%- when 'subtotal' -%}
-              <div class="js-contents" {{ block.shopify_attributes }}>
-                <div>
-                  {%- if cart.cart_level_discount_applications.size > 0 -%}
-                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                      {%- for discount in cart.cart_level_discount_applications -%}
-                        <li class="discounts__discount discounts__discount--position">
-                          {{- 'icon-discount.svg' | inline_asset_content -}}
-                          {{ discount.title | escape }}
-                          (-{{ discount.total_allocated_amount | money }})
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  {%- endif -%}
-                </div>
+      <div class="js-contents">
+        {%- liquid
+          assign tax_amount = cart.total_price | times: 10 | divided_by: 110
+          assign subtotal_amount = cart.total_price | minus: tax_amount
+        -%}
 
-                <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-                  <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
-                </div>
+        {%- if cart.cart_level_discount_applications.size > 0 -%}
+          <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+            {%- for discount in cart.cart_level_discount_applications -%}
+              <li class="discounts__discount discounts__discount--position">
+                {{- 'icon-discount.svg' | inline_asset_content -}}
+                {{ discount.title | escape }}
+                (-{{ discount.total_allocated_amount | money }})
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
 
-                <small class="tax-note caption-large rte">
-                  {%- if cart.duties_included and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- endif -%}
-                </small>
-              </div>
-            {%- else -%}
-              <div class="cart__ctas" {{ block.shopify_attributes }}>
-                <button
-                  type="submit"
-                  id="checkout"
-                  class="cart__checkout-button button"
-                  name="checkout"
-                  {% if cart == empty %}
-                    disabled
-                  {% endif %}
-                  form="cart"
-                >
-                  {{ 'sections.cart.checkout' | t }}
-                </button>
-              </div>
-
-              {%- if additional_checkout_buttons -%}
-                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
-                  {{ content_for_additional_checkout_buttons }}
-                </div>
-              {%- endif -%}
-          {%- endcase -%}
-        {% endfor %}
-
-        <div id="cart-errors"></div>
+        <div class="cart-summary__row">
+          <span>商品小計</span>
+          <span>{{ subtotal_amount | money }}</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>送料</span>
+          <span class="cart-summary__free">無料</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>消費税（10%）</span>
+          <span>{{ tax_amount | money }}</span>
+        </div>
+        <div class="cart-summary__row cart-summary__row--total">
+          <span>合計</span>
+          <span class="cart-summary__total-value">{{ cart.total_price | money }}</span>
+        </div>
       </div>
     </div>
+
+    <div class="cart__ctas">
+      <button
+        type="submit"
+        id="checkout"
+        class="cart__checkout-button button"
+        name="checkout"
+        {% if cart == empty %}
+          disabled
+        {% endif %}
+        form="cart"
+      >
+        レジに進む
+      </button>
+    </div>
+
+    <a href="{{ routes.all_products_collection_url }}" class="cart-summary__continue link underlined-link">
+      買い物を続ける
+    </a>
+
+    {%- if additional_checkout_buttons -%}
+      <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    {%- endif -%}
+
+    <div id="cart-errors"></div>
+
+    <ul class="cart-summary__trust list-unstyled">
+      <li>{{- 'icon-checkmark.svg' | inline_asset_content -}}<span>SSL暗号化で安全な決済</span></li>
+      <li>{{- 'icon-checkmark.svg' | inline_asset_content -}}<span>10,000円以上で送料無料</span></li>
+      <li>{{- 'icon-checkmark.svg' | inline_asset_content -}}<span>30日間返品保証</span></li>
+      <li>{{- 'icon-checkmark.svg' | inline_asset_content -}}<span>カスタマーサポート対応</span></li>
+    </ul>
   </div>
 </div>
+
+<script>
+  (function () {
+    var raf;
+    function equalizeCartCards() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function () {
+        var left = document.querySelector('.cart__items-card');
+        var trust = document.querySelector('.cart-summary__trust');
+        if (!left || !trust) return;
+        left.style.minHeight = '';
+        if (window.matchMedia('(min-width: 990px)').matches) {
+          // 左の商品カードを、右の「注文内容＋保証バッジ」の下端まで伸ばす
+          var target = trust.getBoundingClientRect().bottom - left.getBoundingClientRect().top;
+          if (target > left.offsetHeight) {
+            left.style.minHeight = target + 'px';
+          }
+        }
+      });
+    }
+    document.addEventListener('DOMContentLoaded', equalizeCartCards);
+    window.addEventListener('load', equalizeCartCards);
+    window.addEventListener('resize', equalizeCartCards);
+    // 数量変更・削除などカート再描画（AJAX）後に再計算
+    ['main-cart-footer', 'main-cart-items'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) new MutationObserver(equalizeCartCards).observe(el, { childList: true, subtree: true });
+    });
+    equalizeCartCards();
+  })();
+</script>
 
 {% schema %}
 {

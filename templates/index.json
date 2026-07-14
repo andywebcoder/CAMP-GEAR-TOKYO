@@ -15,16 +15,23 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Browse our latest products",
+            "heading": "CAMPSITE PORTFOLIO",
             "heading_size": "h0"
+          }
+        },
+        "text_6tz9im": {
+          "type": "text",
+          "settings": {
+            "text": "都市から自然へ。最高のキャンプ体験を、最高のギアとともに。",
+            "text_style": "body"
           }
         },
         "button": {
           "type": "buttons",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
+            "button_label_1": "コレクションを見る",
+            "button_link_1": "shopify://collections",
+            "button_style_secondary_1": false,
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
@@ -33,52 +40,178 @@
       },
       "block_order": [
         "heading",
+        "text_6tz9im",
         "button"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
+        "image": "shopify://shop_images/dreokt-JfAAiJrzW2M-unsplash.jpg",
+        "image_overlay_opacity": 10,
+        "image_height": "medium",
         "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "left",
+        "show_text_box": false,
+        "color_scheme": "scheme-2",
         "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
         "show_text_below": false
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "collection_list_mnq6Rk": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_URipUV": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "テント-タープ"
+          }
+        },
+        "featured_collection_Bhi7Uz": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "寝袋-マット"
+          }
+        },
+        "featured_collection_xF4w9Q": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "調理器具-食器"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_URipUV",
+        "featured_collection_Bhi7Uz",
+        "featured_collection_xF4w9Q"
+      ],
+      "name": "t:sections.collection-list.presets.name",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
+        "title": "<strong>SHOP BY VATEGORY</strong>",
+        "heading_size": "h1",
+        "description": "カテゴリーから探す",
+        "description_style": "body",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "",
+        "show_view_all": false,
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_kjayKd": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "frontpage",
+        "products_to_show": 4,
+        "title": "<strong>FEATURED PRODUCTS</strong>",
+        "heading_size": "h1",
+        "description": "<p>注目のアイテム</p>",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "enable_desktop_slider": false,
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
+        "color_scheme": "scheme-2",
         "image_ratio": "adapt",
         "image_shape": "default",
-        "show_secondary_image": true,
+        "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
-        "padding_top": 44,
+        "swipe_on_mobile": false,
+        "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "image_with_text_iMnWGT": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_D6ikq4": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>最高品質のギアで、最高の体験を</strong>",
+            "heading_size": "h1"
+          }
+        },
+        "text_anVzBr": {
+          "type": "text",
+          "settings": {
+            "text": "<p>私たちは、アウトドア愛好家のために厳選された高品質なキャンプギアを提供しています。初心者からベテランまで、すべての人に最適な装備をご用意しています。</p>",
+            "text_style": "body"
+          }
+        },
+        "button_BWjdV3": {
+          "type": "button",
+          "settings": {
+            "button_label": "ブランドストーリー",
+            "button_link": "shopify://collections",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_D6ikq4",
+        "text_anVzBr",
+        "button_BWjdV3"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/9022a705161ff42b7879d88f1fd6d0e8_5c804e5c-65ef-4e88-a0df-485f3d891c80.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1774692867382e2a2a": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_qbU4Q4": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "INSTAGRAM FEED",
+            "title_color": "#121212",
+            "title_size_v2": 40,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_qbU4Q4"
+      ],
+      "settings": {
+        "include_margins": true
       }
     }
   },
   "order": [
     "image_banner",
-    "featured_collection"
+    "collection_list_mnq6Rk",
+    "featured_collection_kjayKd",
+    "image_with_text_iMnWGT",
+    "1774692867382e2a2a"
   ]
 }
