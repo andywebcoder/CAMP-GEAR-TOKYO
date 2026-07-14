@@ -9,73 +9,30 @@
  */
 {
   "sections": {
-    "store_detail_hymbwg": {
-      "type": "store-detail",
-      "blocks": {
-        "feature_QBpiKR": {
-          "type": "feature",
-          "settings": {
-            "icon": "⛺",
-            "title": "テント各種",
-            "description": "有名ブランドのテントを常時50張り以上展示。実物を見て選べます。"
-          }
-        },
-        "feature_MWkGmJ": {
-          "type": "feature",
-          "settings": {
-            "icon": "🪑",
-            "title": "椅子・テーブル類",
-            "description": "アウトドアチェア・テーブルを豊富に取り揃え。座り心地を試せます。"
-          }
-        },
-        "feature_cVNpXJ": {
-          "type": "feature",
-          "settings": {
-            "icon": "🛌",
-            "title": "寝袋・マット類",
-            "description": "オールシーズン対応の寝袋・マットを展示。快眠グッズもご相談ください。"
-          }
-        },
-        "feature_D3bLPj": {
-          "type": "feature",
-          "settings": {
-            "icon": "☕",
-            "title": "カフェスペース",
-            "description": "アウトドア用品に囲まれたカフェで、コーヒーを飲みながら相談できます。"
-          }
-        }
-      },
-      "block_order": [
-        "feature_QBpiKR",
-        "feature_MWkGmJ",
-        "feature_cVNpXJ",
-        "feature_D3bLPj"
-      ],
-      "name": "店舗詳細",
+    "store_detail_mo_UrYETx": {
+      "type": "store-detail-mo",
+      "name": "店舗詳細（メタオブジェクト）",
       "settings": {
         "list_url": "",
-        "store_name": "CAMP GEAR TOKYO 渋谷店",
-        "tagline": "都心最大級の品揃えと専門スタッフがあなたの冒険をサポート",
-        "postal": "150-0041",
-        "address": "東京都渋谷区神南1-12-16",
-        "building": "アップルビル 1F",
-        "tel": "03-1234-5678",
-        "fax": "03-1234-5679",
-        "hours_weekday": "11:00 - 20:00",
-        "hours_weekend": "10:00 - 19:00",
-        "hours_holiday": "10:00 - 19:00",
-        "closed": "年中無休（年末年始を除く）",
-        "categories": "テント・タープ,寝袋・マット,調理器具,ランタン/照明,バックパック,ライト・シューズ",
-        "map_embed": "",
-        "access_train": "JR渋谷駅ハチ公口より徒歩5分\n東京メトロ各線 渋谷駅 B1出口より徒歩3分",
-        "access_car": "首都高速3号渋谷線 渋谷出口より約5分\n提携駐車場あり（2,000円以上で1時間無料）",
-        "access_bus": "都営バス「渋谷神南」バス停より徒歩1分\n各方面から渋谷駅行き多数運行",
-        "padding_bottom": 60,
-        "color_scheme": ""
+        "color_scheme": "",
+        "features_heading": "店舗の特徴",
+        "f1_icon": "⛺",
+        "f1_title": "テント各種",
+        "f1_desc": "有名ブランドのテントを常時50張り以上展示。実物を見て選べます。",
+        "f2_icon": "🪑",
+        "f2_title": "椅子・テーブル類",
+        "f2_desc": "アウトドアチェア・テーブルを豊富に取り揃え。座り心地を試せます。",
+        "f3_icon": "🛌",
+        "f3_title": "寝袋・マット類",
+        "f3_desc": "オールシーズン対応の寝袋・マットを展示。快眠グッズもご相談ください。",
+        "f4_icon": "☕",
+        "f4_title": "カフェスペース",
+        "f4_desc": "アウトドア用品に囲まれたカフェで、コーヒーを飲みながら相談できます。",
+        "padding_bottom": 60
       }
     }
   },
   "order": [
-    "store_detail_hymbwg"
+    "store_detail_mo_UrYETx"
   ]
 }
