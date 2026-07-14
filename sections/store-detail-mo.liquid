@@ -1,22 +1,32 @@
 {%- comment -%}
   店舗詳細（メタオブジェクト「店舗情報」用）
+  レイアウト: パンくず / ヒーロー / 店舗情報（左・連動）＋店舗の特徴（右・設定） / アクセス（下・連動）
   metaobject テンプレートで使用。現在の店舗は {{ metaobject }} で参照。
 {%- endcomment -%}
 
 {%- assign store = metaobject -%}
 
 {%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
   #StoreHero-{{ section.id }} {
     {%- if store.image.value != blank -%}
-      background-image: linear-gradient(90deg, rgba(20,22,28,0.9), rgba(20,22,28,0.5)), url({{ store.image.value | image_url: width: 2000 }});
+      background-image: linear-gradient(90deg, rgba(20,22,28,0.92), rgba(20,22,28,0.55)), url({{ store.image.value | image_url: width: 2000 }});
     {%- else -%}
       background: linear-gradient(90deg, #23262e, #3a3f4a);
     {%- endif -%}
   }
 {%- endstyle -%}
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
 
+  {%- comment -%} パンくず {%- endcomment -%}
   <nav class="store-detail__crumbs page-width" aria-label="パンくず">
     <a href="{{ routes.root_url }}">ホーム</a>
     <span aria-hidden="true">/</span>
@@ -25,6 +35,7 @@
     <span class="store-detail__crumbs-current">{{ store.name.value | escape }}</span>
   </nav>
 
+  {%- comment -%} ヒーロー {%- endcomment -%}
   <div class="store-detail__hero" id="StoreHero-{{ section.id }}">
     <div class="page-width">
       <h1 class="store-detail__hero-title">{{ store.name.value | escape }}</h1>
@@ -35,15 +46,18 @@
   </div>
 
   <div class="page-width store-detail__inner">
+
+    {%- comment -%} 店舗情報（左・連動） ＋ 店舗の特徴（右・設定） {%- endcomment -%}
     <div class="store-detail__cols">
 
+      {%- comment -%} 左：店舗情報カード（メタオブジェクト連動） {%- endcomment -%}
       <div class="store-info">
         <h2 class="store-detail__subtitle">店舗情報</h2>
 
         {%- if store.address.value != blank -%}
           <div class="store-info__item">
             <p class="store-info__label">所在地</p>
-            <p class="store-info__value">{{ store.address.value | escape }}</p>
+            <p class="store-info__value">{{ store.address.value | escape | newline_to_br }}</p>
           </div>
         {%- endif -%}
 
@@ -75,21 +89,50 @@
         {%- endif -%}
       </div>
 
-      <div class="store-detail__access">
-        <h2 class="store-detail__subtitle">アクセス</h2>
-        <div class="store-detail__map">
-          {%- if store.map.value != blank -%}
-            {{ store.map.value }}
-          {%- else -%}
-            <div class="store-detail__map-placeholder">Google Maps（管理画面で埋め込みコードを設定）</div>
-          {%- endif -%}
+      {%- comment -%} 右：店舗の特徴（セクション設定・全店共通） {%- endcomment -%}
+      {%- assign has_feature = false -%}
+      {%- if section.settings.f1_title != blank or section.settings.f2_title != blank or section.settings.f3_title != blank or section.settings.f4_title != blank -%}
+        {%- assign has_feature = true -%}
+      {%- endif -%}
+      {%- if has_feature -%}
+        <div class="store-features">
+          <h2 class="store-detail__subtitle">{{ section.settings.features_heading | escape }}</h2>
+          <div class="store-features__grid">
+            {%- for i in (1..4) -%}
+              {%- assign t = 'f' | append: i | append: '_title' -%}
+              {%- assign ic = 'f' | append: i | append: '_icon' -%}
+              {%- assign de = 'f' | append: i | append: '_desc' -%}
+              {%- assign f_title = section.settings[t] -%}
+              {%- assign f_icon = section.settings[ic] -%}
+              {%- assign f_desc = section.settings[de] -%}
+              {%- if f_title != blank -%}
+                <div class="feature-card">
+                  {%- if f_icon != blank -%}<span class="feature-card__icon" aria-hidden="true">{{ f_icon }}</span>{%- endif -%}
+                  <p class="feature-card__title">{{ f_title | escape }}</p>
+                  {%- if f_desc != blank -%}<p class="feature-card__desc">{{ f_desc | escape }}</p>{%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
         </div>
-        {%- if store.access.value != blank -%}
-          <p class="store-detail__access-text">{{ store.access.value | escape | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} アクセス（下・全幅・連動） {%- endcomment -%}
+    <div class="store-detail__access">
+      <h2 class="store-detail__subtitle">アクセス</h2>
+      <div class="store-detail__map">
+        {%- if store.map.value != blank -%}
+          {{ store.map.value }}
+        {%- else -%}
+          <div class="store-detail__map-placeholder">Google Maps（管理画面で埋め込みコードを設定）</div>
         {%- endif -%}
       </div>
-
+      {%- if store.access.value != blank -%}
+        <p class="store-detail__access-text">{{ store.access.value | escape | newline_to_br }}</p>
+      {%- endif -%}
     </div>
+
   </div>
 </div>
 
@@ -115,14 +158,13 @@
   .store-detail__hero-title { margin: 0; color: #fff; }
   .store-detail__hero-tagline { margin: 1rem 0 0; opacity: 0.9; font-size: 1.4rem; }
 
-  .store-detail__inner { padding-bottom: 6rem; }
-
   .store-detail__subtitle { font-size: 1.7rem; margin: 0 0 1.6rem; }
 
   .store-detail__cols {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
+    margin-bottom: 5rem;
   }
   @media screen and (min-width: 750px) {
     .store-detail__cols { grid-template-columns: 1.1fr 0.9fr; }
@@ -144,7 +186,20 @@
     color: rgb(var(--color-background));
   }
 
-  .store-detail__map { aspect-ratio: 4 / 3; background: rgba(var(--color-foreground), 0.06); overflow: hidden; }
+  .store-features__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.4rem;
+  }
+  .feature-card {
+    border: 1px solid rgba(var(--color-foreground), 0.12);
+    padding: 1.8rem 1.4rem;
+  }
+  .feature-card__icon { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
+  .feature-card__title { margin: 0 0 0.6rem; font-weight: 700; font-size: 1.4rem; }
+  .feature-card__desc { margin: 0; font-size: 1.25rem; line-height: 1.7; color: rgba(var(--color-foreground), 0.7); }
+
+  .store-detail__map { aspect-ratio: 21 / 9; background: rgba(var(--color-foreground), 0.06); overflow: hidden; }
   .store-detail__map :is(iframe, img) { width: 100%; height: 100%; border: 0; display: block; }
   .store-detail__map-placeholder {
     display: flex; align-items: center; justify-content: center; height: 100%;
@@ -158,7 +213,23 @@
   "name": "店舗詳細（メタオブジェクト）",
   "settings": [
     { "type": "url", "id": "list_url", "label": "店舗一覧ページのURL（パンくず用）", "info": "例：/pages/store" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "カラースキーム", "default": "scheme-1" }
+    { "type": "color_scheme", "id": "color_scheme", "label": "カラースキーム", "default": "scheme-1" },
+    { "type": "header", "content": "店舗の特徴（右カラム・全店共通）" },
+    { "type": "text", "id": "features_heading", "label": "見出し", "default": "店舗の特徴" },
+    { "type": "text", "id": "f1_icon", "label": "特徴1 アイコン（絵文字）", "default": "⛺" },
+    { "type": "text", "id": "f1_title", "label": "特徴1 タイトル", "default": "テント各種" },
+    { "type": "textarea", "id": "f1_desc", "label": "特徴1 説明", "default": "有名ブランドのテントを常時50張り以上展示。実物を見て選べます。" },
+    { "type": "text", "id": "f2_icon", "label": "特徴2 アイコン（絵文字）", "default": "🪑" },
+    { "type": "text", "id": "f2_title", "label": "特徴2 タイトル", "default": "椅子・テーブル類" },
+    { "type": "textarea", "id": "f2_desc", "label": "特徴2 説明", "default": "アウトドアチェア・テーブルを豊富に取り揃え。座り心地を試せます。" },
+    { "type": "text", "id": "f3_icon", "label": "特徴3 アイコン（絵文字）", "default": "🛌" },
+    { "type": "text", "id": "f3_title", "label": "特徴3 タイトル", "default": "寝袋・マット類" },
+    { "type": "textarea", "id": "f3_desc", "label": "特徴3 説明", "default": "オールシーズン対応の寝袋・マットを展示。快眠グッズもご相談ください。" },
+    { "type": "text", "id": "f4_icon", "label": "特徴4 アイコン（絵文字）", "default": "☕" },
+    { "type": "text", "id": "f4_title", "label": "特徴4 タイトル", "default": "カフェスペース" },
+    { "type": "textarea", "id": "f4_desc", "label": "特徴4 説明", "default": "アウトドア用品に囲まれたカフェで、コーヒーを飲みながら相談できます。" },
+    { "type": "header", "content": "余白" },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "下の余白", "default": 60 }
   ],
   "presets": [
     { "name": "店舗詳細（メタオブジェクト）" }
