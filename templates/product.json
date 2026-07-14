@@ -24,7 +24,7 @@
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
-            "swatch_shape": "circle"
+            "swatch_shape": "square"
           }
         },
         "quantity_selector": {
@@ -34,7 +34,7 @@
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true,
+            "show_dynamic_checkout": false,
             "show_gift_card_recipient": true
           }
         },
@@ -64,7 +64,7 @@
         "media_size": "small",
         "constrain_to_viewport": true,
         "media_fit": "contain",
-        "gallery_layout": "thumbnail",
+        "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
         "media_position": "left",
         "image_zoom": "lightbox",
@@ -74,11 +74,65 @@
         "padding_bottom": 12
       }
     },
+    "product-tabs": {
+      "type": "product-tabs",
+      "blocks": {
+        "tab-details": {
+          "type": "tab",
+          "settings": {
+            "heading": "詳細情報",
+            "content_source": "metafield",
+            "metafield": "custom.tab_details",
+            "content": "<h3>製品の特徴</h3><p>この山岳用軽量テントは、登山やトレッキングに最適な設計となっています。独自の3層構造により、軽量性と耐久性を両立。設営も簡単で、暗闇でも素早くできるよう、カラーコード化されたポールとクリップを採用しています。</p><p><strong>主な特徴：</strong></p><ul><li>超軽量1.2kg設計</li><li>3シーズン対応（春・夏・秋）</li><li>ダブルウォール構造で結露を軽減</li><li>前室付きで荷物の収納に便利</li><li>メッシュパネルで通気性抜群</li></ul>"
+          }
+        },
+        "tab-spec": {
+          "type": "tab",
+          "settings": {
+            "heading": "スペック",
+            "content_source": "metafield",
+            "metafield": "custom.tab_spec",
+            "content": "<h3>製品仕様</h3><ul><li>重量：1.2kg</li><li>収納サイズ：直径12cm × 長さ38cm</li><li>展開サイズ：210 × 130 × 100cm</li><li>定員：1〜2名</li><li>素材：20Dリップストップナイロン</li><li>耐水圧：フライ3000mm / フロア5000mm</li><li>付属品：ポール、ペグ×8、収納袋</li></ul>"
+          }
+        },
+        "tab-review": {
+          "type": "review",
+          "settings": {
+            "heading": "レビュー",
+            "show_judgeme": true,
+            "average_rating": "4.5",
+            "review_count": "124",
+            "content": "<p><strong>山田 太郎</strong> ★★★★★<br/>設営が本当に簡単で、初めてのソロキャンプでも10分で立てられました。軽くて持ち運びも苦になりません。</p><p><strong>佐藤 花子</strong> ★★★★☆<br/>通気性がよく結露が少ないのが気に入っています。前室が思ったより広く、荷物を置けて便利です。</p><p><strong>鈴木 一郎</strong> ★★★★★<br/>3シーズン使っていますが耐久性も問題なし。コスパ最高の一張りだと思います。</p>"
+          }
+        },
+        "tab-shipping": {
+          "type": "tab",
+          "settings": {
+            "heading": "配送・返品",
+            "content_source": "text",
+            "metafield": "",
+            "content": "<h3>配送について</h3><p>ご注文確定後、2〜4営業日以内に発送いたします。全国一律送料550円、5,000円以上のご購入で送料無料です。</p><h3>返品・交換について</h3><p>商品到着後14日以内であれば、未使用品に限り返品・交換を承ります。お客様都合による返品の送料はお客様負担となります。</p>"
+          }
+        }
+      },
+      "block_order": [
+        "tab-details",
+        "tab-spec",
+        "tab-review",
+        "tab-shipping"
+      ],
+      "settings": {
+        "heading": "商品情報",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "You may also like",
-        "heading_size": "h2",
+        "heading": "<strong>関連商品</strong>",
+        "heading_size": "h1",
         "products_to_show": 4,
         "columns_desktop": 4,
         "columns_mobile": "2",
@@ -95,6 +149,7 @@
   },
   "order": [
     "main",
+    "product-tabs",
     "related-products"
   ]
 }
