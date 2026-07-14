@@ -1,7 +1,30 @@
 {%- comment -%}
   店舗詳細セクション（STORE-detail）
-  パンくず / ヒーロー / 店舗情報＋店舗の特徴 / アクセス（地図＋交通手段別）
+  デュアルモード:
+    - メタオブジェクトテンプレート内（{{ metaobject }} あり）→ メタオブジェクトのデータを表示（連動）
+    - 通常ページ内（metaobject なし）→ セクション設定の値を表示（従来動作）
+  レイアウト: パンくず / ヒーロー / 店舗情報＋店舗の特徴 / アクセス（地図＋交通手段別）
 {%- endcomment -%}
+
+{%- assign is_mo = false -%}
+{%- if metaobject != blank -%}{%- assign is_mo = true -%}{%- endif -%}
+
+{%- comment -%} 表示値の解決（メタオブジェクト優先） {%- endcomment -%}
+{%- if is_mo -%}
+  {%- assign r_name = metaobject.name.value -%}
+  {%- assign r_tagline = metaobject.tagline.value -%}
+  {%- assign r_hero = metaobject.image.value -%}
+  {%- assign r_tel = metaobject.tel.value -%}
+  {%- assign r_categories = metaobject.categories.value -%}
+  {%- assign r_map = metaobject.map.value -%}
+{%- else -%}
+  {%- assign r_name = section.settings.store_name -%}
+  {%- assign r_tagline = section.settings.tagline -%}
+  {%- assign r_hero = section.settings.hero_image -%}
+  {%- assign r_tel = section.settings.tel -%}
+  {%- assign r_categories = section.settings.categories -%}
+  {%- assign r_map = section.settings.map_embed -%}
+{%- endif -%}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -13,8 +36,8 @@
     }
   }
   #StoreHero-{{ section.id }} {
-    {%- if section.settings.hero_image != blank -%}
-      background-image: linear-gradient(90deg, rgba(20,22,28,0.92), rgba(20,22,28,0.55)), url({{ section.settings.hero_image | image_url: width: 2000 }});
+    {%- if r_hero != blank -%}
+      background-image: linear-gradient(90deg, rgba(20,22,28,0.92), rgba(20,22,28,0.55)), url({{ r_hero | image_url: width: 2000 }});
     {%- else -%}
       background: linear-gradient(90deg, #23262e, #3a3f4a);
     {%- endif -%}
@@ -31,15 +54,15 @@
       <a href="{{ section.settings.list_url }}">店舗一覧</a>
       <span aria-hidden="true">/</span>
     {%- endif -%}
-    <span class="store-detail__crumbs-current">{{ section.settings.store_name | escape }}</span>
+    <span class="store-detail__crumbs-current">{{ r_name | escape }}</span>
   </nav>
 
   {%- comment -%} ヒーロー {%- endcomment -%}
   <div class="store-detail__hero" id="StoreHero-{{ section.id }}">
     <div class="page-width">
-      <h1 class="store-detail__hero-title">{{ section.settings.store_name | escape }}</h1>
-      {%- if section.settings.tagline != blank -%}
-        <p class="store-detail__hero-tagline">{{ section.settings.tagline | escape }}</p>
+      <h1 class="store-detail__hero-title">{{ r_name | escape }}</h1>
+      {%- if r_tagline != blank -%}
+        <p class="store-detail__hero-tagline">{{ r_tagline | escape }}</p>
       {%- endif -%}
     </div>
   </div>
@@ -56,37 +79,45 @@
         <div class="store-info__item">
           <p class="store-info__label">所在地</p>
           <p class="store-info__value">
-            {%- if section.settings.postal != blank -%}〒{{ section.settings.postal | escape }}<br>{%- endif -%}
-            {{ section.settings.address | escape }}
-            {%- if section.settings.building != blank -%}<br>{{ section.settings.building | escape }}{%- endif -%}
+            {%- if is_mo -%}
+              {{ metaobject.address.value | escape | newline_to_br }}
+            {%- else -%}
+              {%- if section.settings.postal != blank -%}〒{{ section.settings.postal | escape }}<br>{%- endif -%}
+              {{ section.settings.address | escape }}
+              {%- if section.settings.building != blank -%}<br>{{ section.settings.building | escape }}{%- endif -%}
+            {%- endif -%}
           </p>
         </div>
 
-        {%- if section.settings.tel != blank or section.settings.fax != blank -%}
+        {%- if r_tel != blank or section.settings.fax != blank -%}
           <div class="store-info__item">
             <p class="store-info__label">電話番号</p>
             <p class="store-info__value">
-              {%- if section.settings.tel != blank -%}TEL: <a href="tel:{{ section.settings.tel | remove: '-' }}">{{ section.settings.tel | escape }}</a>{%- endif -%}
-              {%- if section.settings.fax != blank -%}<br>FAX: {{ section.settings.fax | escape }}{%- endif -%}
+              {%- if r_tel != blank -%}TEL: <a href="tel:{{ r_tel | remove: '-' }}">{{ r_tel | escape }}</a>{%- endif -%}
+              {%- unless is_mo -%}{%- if section.settings.fax != blank -%}<br>FAX: {{ section.settings.fax | escape }}{%- endif -%}{%- endunless -%}
             </p>
           </div>
         {%- endif -%}
 
         <div class="store-info__item">
           <p class="store-info__label">営業時間</p>
-          <table class="store-info__hours">
-            {%- if section.settings.hours_weekday != blank -%}<tr><th>平日</th><td>{{ section.settings.hours_weekday | escape }}</td></tr>{%- endif -%}
-            {%- if section.settings.hours_weekend != blank -%}<tr><th>土日</th><td>{{ section.settings.hours_weekend | escape }}</td></tr>{%- endif -%}
-            {%- if section.settings.hours_holiday != blank -%}<tr><th>日祝・特別</th><td>{{ section.settings.hours_holiday | escape }}</td></tr>{%- endif -%}
-            {%- if section.settings.closed != blank -%}<tr><th>定休日</th><td>{{ section.settings.closed | escape }}</td></tr>{%- endif -%}
-          </table>
+          {%- if is_mo -%}
+            <p class="store-info__value">{{ metaobject.hours.value | escape | newline_to_br }}</p>
+          {%- else -%}
+            <table class="store-info__hours">
+              {%- if section.settings.hours_weekday != blank -%}<tr><th>平日</th><td>{{ section.settings.hours_weekday | escape }}</td></tr>{%- endif -%}
+              {%- if section.settings.hours_weekend != blank -%}<tr><th>土日</th><td>{{ section.settings.hours_weekend | escape }}</td></tr>{%- endif -%}
+              {%- if section.settings.hours_holiday != blank -%}<tr><th>日祝・特別</th><td>{{ section.settings.hours_holiday | escape }}</td></tr>{%- endif -%}
+              {%- if section.settings.closed != blank -%}<tr><th>定休日</th><td>{{ section.settings.closed | escape }}</td></tr>{%- endif -%}
+            </table>
+          {%- endif -%}
         </div>
 
-        {%- if section.settings.categories != blank -%}
+        {%- if r_categories != blank -%}
           <div class="store-info__item">
             <p class="store-info__label">取扱カテゴリー</p>
             <div class="store-info__tags">
-              {%- assign cats = section.settings.categories | split: ',' -%}
+              {%- assign cats = r_categories | split: ',' -%}
               {%- for cat in cats -%}
                 {%- assign c = cat | strip -%}
                 {%- if c != blank -%}<span class="store-info__tag">{{ c | escape }}</span>{%- endif -%}
@@ -96,7 +127,7 @@
         {%- endif -%}
       </div>
 
-      {%- comment -%} 右：店舗の特徴 {%- endcomment -%}
+      {%- comment -%} 右：店舗の特徴（全店共通・セクションのブロック） {%- endcomment -%}
       {%- assign feature_blocks = section.blocks | where: 'type', 'feature' -%}
       {%- if feature_blocks.size > 0 -%}
         <div class="store-features">
@@ -118,34 +149,40 @@
     <div class="store-detail__access">
       <h2 class="store-detail__subtitle">アクセス</h2>
       <div class="store-detail__map">
-        {%- if section.settings.map_embed != blank -%}
-          {{ section.settings.map_embed }}
+        {%- if r_map != blank -%}
+          {{ r_map }}
         {%- else -%}
           <div class="store-detail__map-placeholder">Google Maps（管理画面で埋め込みコードを設定）</div>
         {%- endif -%}
       </div>
 
-      {%- if section.settings.access_train != blank or section.settings.access_car != blank or section.settings.access_bus != blank -%}
-        <div class="store-detail__access-tips">
-          {%- if section.settings.access_train != blank -%}
-            <div class="access-tip">
-              <p class="access-tip__title"><span aria-hidden="true">🚃</span>電車でお越しの方</p>
-              <p class="access-tip__text">{{ section.settings.access_train | escape | newline_to_br }}</p>
-            </div>
-          {%- endif -%}
-          {%- if section.settings.access_car != blank -%}
-            <div class="access-tip">
-              <p class="access-tip__title"><span aria-hidden="true">🚗</span>車でお越しの方</p>
-              <p class="access-tip__text">{{ section.settings.access_car | escape | newline_to_br }}</p>
-            </div>
-          {%- endif -%}
-          {%- if section.settings.access_bus != blank -%}
-            <div class="access-tip">
-              <p class="access-tip__title"><span aria-hidden="true">🚌</span>バスでお越しの方</p>
-              <p class="access-tip__text">{{ section.settings.access_bus | escape | newline_to_br }}</p>
-            </div>
-          {%- endif -%}
-        </div>
+      {%- if is_mo -%}
+        {%- if metaobject.access.value != blank -%}
+          <p class="store-detail__access-text">{{ metaobject.access.value | escape | newline_to_br }}</p>
+        {%- endif -%}
+      {%- else -%}
+        {%- if section.settings.access_train != blank or section.settings.access_car != blank or section.settings.access_bus != blank -%}
+          <div class="store-detail__access-tips">
+            {%- if section.settings.access_train != blank -%}
+              <div class="access-tip">
+                <p class="access-tip__title"><span aria-hidden="true">🚃</span>電車でお越しの方</p>
+                <p class="access-tip__text">{{ section.settings.access_train | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.access_car != blank -%}
+              <div class="access-tip">
+                <p class="access-tip__title"><span aria-hidden="true">🚗</span>車でお越しの方</p>
+                <p class="access-tip__text">{{ section.settings.access_car | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.access_bus != blank -%}
+              <div class="access-tip">
+                <p class="access-tip__title"><span aria-hidden="true">🚌</span>バスでお越しの方</p>
+                <p class="access-tip__text">{{ section.settings.access_bus | escape | newline_to_br }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       {%- endif -%}
     </div>
 
@@ -247,6 +284,8 @@
     display: flex; align-items: center; justify-content: center; height: 100%;
     color: rgba(var(--color-foreground), 0.5); font-size: 1.3rem;
   }
+
+  .store-detail__access-text { margin: 1.6rem 0 0; font-size: 1.4rem; line-height: 1.8; }
 
   .store-detail__access-tips {
     display: grid;
