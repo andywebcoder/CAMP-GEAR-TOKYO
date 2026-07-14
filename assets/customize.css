@@ -1,0 +1,736 @@
+/* コレクションカード：テキストを画像内に重ねて表示 */
+
+/* 内側のcard__informationを表示（Dawnデフォルトでdisplay:none） */
+.collection-card-wrapper .card--standard.card--media .card__inner .card__information {
+  display: block;
+}
+
+/* コレクションカード：画像自体もリンクにする */
+.card__media-link {
+  display: block;
+}
+
+/* カートページの見出しを太字に */
+.cart__title-bold {
+  font-weight: 700;
+}
+
+/* カートの商品画像を正方形に揃える */
+.cart-item__image {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* デスクトップ：カート商品画像を120px正方形・上揃え */
+@media screen and (min-width: 750px) {
+  .cart-item__media {
+    vertical-align: top;
+  }
+
+  .cart-item__image-container {
+    display: block;
+    width: 120px;
+    max-width: none;
+  }
+
+  .cart-item__image {
+    width: 120px;
+    height: 120px;
+    max-width: none;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+}
+
+/* カート：商品リストを枠線＋paddingのカードに。「◯アイテム」は枠の上に表示 */
+#main-cart-items.cart__items {
+  border: 0;
+  padding: 0;
+}
+
+.cart__items-count {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.cart__items-card {
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  border-radius: 0;
+  padding: 0.6rem 2.4rem 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  /* 上部の見出し下線（中途半端な線）を消す */
+  #main-cart-items .cart-items th {
+    border-bottom: 0;
+  }
+
+  /* 各アイテムの下に区切り線。最後のアイテムは下線なし */
+  #main-cart-items .cart-items tbody td {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  #main-cart-items .cart-items tbody tr:last-child td {
+    border-bottom: 0;
+  }
+}
+
+/* カート：数量と「削除」を縦並びにする */
+.cart-item__quantity-wrapper {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.8rem;
+}
+
+/* 「削除」をゴミ箱アイコンから下線テキストリンクに */
+.cart-item__remove-text {
+  min-height: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  font-size: 1.3rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.cart-item__remove-text:hover {
+  color: rgb(var(--color-foreground));
+}
+
+/* 行合計（価格）：スマホは既存の合計列を使うので非表示 */
+.cart-item__stacked-total {
+  display: none;
+  font-weight: 600;
+  text-align: right;
+}
+
+.cart-item__stacked-total .cart-item__old-price {
+  color: rgba(var(--color-foreground), 0.6);
+  margin-right: 0.6rem;
+}
+
+@media screen and (min-width: 750px) {
+  /* 価格・数量・削除を右側に縦積み */
+  .cart-item__stacked-total {
+    display: block;
+  }
+
+  .cart-item__quantity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  /* 合計は数量セルに移動したので、独立した合計列（見出し＋セル）を隠す */
+  .cart-items thead th.small-hide.right,
+  .cart-item__totals.right.small-hide {
+    display: none;
+  }
+}
+
+/* ===== カート：右側に注文内容サマリー（2カラム） ===== */
+.cart-summary {
+  max-width: 120rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.cart-summary__card {
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  border-radius: 0;
+  padding: 2.4rem;
+  background: rgb(var(--color-background));
+}
+
+.cart-summary__title {
+  margin: 0 0 1.6rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.cart-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 1.4rem;
+  padding: 0.7rem 0;
+}
+
+.cart-summary__free {
+  color: #1a9d5a;
+  font-weight: 600;
+}
+
+.cart-summary__row--total {
+  margin-top: 1rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(var(--color-foreground), 0.12);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.cart-summary__total-value {
+  color: #f97316;
+  font-size: 2.1rem;
+  font-weight: 700;
+}
+
+.cart-summary__tax-note {
+  font-size: 1.2rem;
+  color: rgba(var(--color-foreground), 0.55);
+  padding-top: 0.2rem;
+}
+
+.cart-summary .cart__ctas {
+  margin-top: 1.8rem;
+}
+
+.cart-summary .cart__checkout-button {
+  width: 100%;
+  --color-button: 249, 115, 22;
+  --color-button-text: 255, 255, 255;
+}
+
+.cart-summary__continue {
+  display: block;
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 1.3rem;
+}
+
+.cart-summary__trust {
+  margin: 1.8rem 0 0;
+  padding: 1.8rem;
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  border-radius: 0;
+}
+
+.cart-summary__trust li {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-size: 1.3rem;
+  padding: 0.5rem 0;
+  color: rgba(var(--color-foreground), 0.85);
+}
+
+.cart-summary__trust li .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #1a9d5a;
+  flex-shrink: 0;
+}
+
+@media screen and (min-width: 990px) {
+  #MainContent:has(> .cart__footer-wrapper) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34rem;
+    gap: 4rem;
+    align-items: start;
+    max-width: 126rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  #MainContent:has(> .cart__footer-wrapper) > .shopify-section .page-width {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  /* 右カラム（注文内容）の上端を、左の商品カード上端に合わせる */
+  #MainContent:has(> .cart__footer-wrapper) > .cart__footer-wrapper {
+    margin-top: 13.1rem;
+  }
+
+  #MainContent:has(> .cart__footer-wrapper) > .cart__footer-wrapper .cart-summary {
+    max-width: none;
+    padding-inline: 0;
+    margin-inline: 0;
+  }
+
+  /* おすすめ商品セクションは2カラムの下に全幅で配置 */
+  #MainContent:has(> .cart__footer-wrapper) > .cart-recommendations-wrapper {
+    grid-column: 1 / -1;
+  }
+}
+
+/* カート下部：よく一緒に購入されている商品 */
+.cart-reco__title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 1.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+}
+
+.cart-reco__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+@media screen and (min-width: 750px) {
+  .cart-reco__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cart-reco__card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cart-reco__media {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: rgba(var(--color-foreground), 0.04);
+}
+
+.cart-reco__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cart-reco__name {
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.4;
+}
+
+.cart-reco__price {
+  font-weight: 700;
+  color: #f97316;
+}
+
+/* テキストオーバーレイを画像下部に絶対配置 */
+.collection-card-wrapper .card--standard.card--media .card__inner .card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+  z-index: 1;
+}
+
+/* テキストカラーを白に変更 */
+.collection-card-wrapper .card--standard.card--media .card__inner .card__heading a,
+.collection-card-wrapper .card--standard.card--media .card__inner .card__count {
+  color: #ffffff;
+}
+
+/* 画像外のcard__content（タイトル重複防止のため非表示） */
+.collection-card-wrapper .card--standard.card--media > .card__content {
+  display: none;
+}
+
+/* アイテム数テキストのスタイル */
+.card__count {
+  margin: 0.3rem 0 0;
+  font-size: 1.4rem;
+}
+
+/* 商品カード：タグを画像内（左上）に表示 */
+.card__tags {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  z-index: 2;
+}
+
+.card__tag {
+  background-color: rgba(249, 115, 22, 0.8);
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2px;
+}
+
+/* フッター：コピーライトを中央寄せ・上下余白を縮小 */
+.footer__content-bottom {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.footer__content-bottom-wrapper {
+  justify-content: center;
+}
+
+.footer__content-bottom-wrapper .footer__copyright {
+  margin-top: 0;
+}
+
+/* 商品ページ：サムネイルを左側に縦並びで表示 */
+@media screen and (min-width: 750px) {
+  media-gallery[data-desktop-layout='thumbnail_slider'] {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  media-gallery[data-desktop-layout='thumbnail_slider'] slider-component:not(.thumbnail-slider) {
+    flex: 1;
+    order: 2;
+  }
+
+  media-gallery[data-desktop-layout='thumbnail_slider'] .thumbnail-slider {
+    order: 1;
+    width: 10rem;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  media-gallery[data-desktop-layout='thumbnail_slider'] .thumbnail-slider .thumbnail-list {
+    flex-direction: column !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* サムネイルアイテム：縦並び時に幅100%で正方形を維持 */
+  media-gallery[data-desktop-layout='thumbnail_slider'] .thumbnail-slider .thumbnail-list__item {
+    width: 100% !important;
+  }
+}
+
+/* 商品ページ：選択中サムネイルの枠線をオレンジに変更 */
+.thumbnail[aria-current],
+.thumbnail[aria-current]:focus:not(:focus-visible) {
+  box-shadow: 0 0 0 0.1rem #F97316;
+  border-color: #F97316;
+}
+
+/* 商品カード：hover時のアンダーラインを無効化 */
+.underline-links-hover:hover a {
+  text-decoration: none;
+}
+
+/* 商品カード：枠線（Figma: E5E7EB / 1px） */
+.product-card-wrapper {
+  border: 1px solid #E5E7EB;
+}
+
+/* 商品カード：商品名（Figma: 16px / weight 600 / 行間 25.6） */
+.product-card-wrapper .card__heading,
+.product-card-wrapper .card__heading a {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25.6px;
+}
+
+/* 商品カード：価格（Figma: 18px / weight 700 / 行間 28.8 / オレンジ） */
+.product-card-wrapper .price-item {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28.8px;
+  color: #F97316;
+}
+
+/* 商品カード：商品名＋価格ブロックの左右余白を20pxに
+   （Dawnが .card--standard > .card__content .card__information で0にしているため詳細度を上げて上書き） */
+.product-card-wrapper .card--standard > .card__content .card__information {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* バリエーションのスウォッチ：選択中の枠線を青に（Figma）。詳細度を上げてDawnの黒枠を上書き */
+.product-form__input--swatch .swatch-input__input:checked + .swatch-input__label,
+.product-form__input--swatch .swatch-input__input:active + .swatch-input__label {
+  outline: 0.2rem solid #2D7FF9;
+  outline-offset: 0.2rem;
+}
+
+/* バリエーションのスウォッチ：四角（角丸なし） */
+.product-form__input--swatch .swatch-input__label,
+.product-form__input--swatch .swatch {
+  border-radius: 0;
+}
+
+/* お気に入り（Wishlist Hero）：「カートに追加」の隣に四角ボタンで配置 */
+.product-form__buttons {
+  display: inline-block;
+  width: calc(100% - 64px);
+  vertical-align: top;
+  margin: 0;
+}
+
+#wishlisthero-product-page-button-container {
+  display: inline-block;
+  width: 56px;
+  vertical-align: top;
+  margin-left: 20px;
+  padding: 0 !important;
+}
+
+#wishlisthero-product-page-button-container > div {
+  height: 100%;
+}
+
+/* アプリのインラインスタイル（丸・全幅）を上書きして四角に */
+#wishlisthero-product-page-button-container button {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 47px !important;
+  min-height: 47px !important;
+  border: 2px solid #E5E7EB !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+}
+
+/* Dawnの .button::after（box-shadowで描く枠線リング）を無効化 */
+#wishlisthero-product-page-button-container button::after,
+#wishlisthero-product-page-button-container button::before {
+  display: none !important;
+  box-shadow: none !important;
+}
+
+/* 商品ページ：数量ラベルと数量入力を横並びに */
+.product-form__quantity {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.product-form__quantity .quantity__label {
+  margin-bottom: 0;
+}
+
+/* 商品ページ：カラー・数量ラベルのタイポグラフィ（Figma: 16px / weight 600 / 行間 25.6） */
+.product-form__input--swatch .form__label,
+.product-form__quantity .quantity__label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25.6px;
+}
+
+/* 商品説明のリスト：箇条書き(・)を緑のチェックマークに */
+.product__description ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.product__description ul li {
+  position: relative;
+  padding-left: 1.8em;
+}
+
+.product__description ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231AB385' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* フッターメニュー：アクティブ項目（リンク先が / のため現在ページ扱い）の下線をなくす */
+.footer-block__details-content .list-menu__item--active {
+  text-decoration: none;
+}
+
+/* メール登録フォーム：フォーム全体の幅上限を拡大（Dawnは36rem固定。2クラスで詳細度を上げて上書き） */
+.newsletter__wrapper .newsletter-form {
+  max-width: 48rem;
+}
+
+/* メール登録フォーム：入力欄＋ボタンの実際の横幅（この数値で調整） */
+.newsletter__wrapper .newsletter-form__field-wrapper {
+  max-width: 48rem;
+}
+
+/* メール登録フォーム：inputとボタンを横並びにする */
+.newsletter-form__input-wrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.newsletter-form__input-wrapper .field {
+  flex: 1;
+}
+
+/* メール登録フォーム：登録するボタンをオレンジに変更 */
+.newsletter-form__button--text {
+  background-color: #F97316;
+  color: #ffffff;
+  border: none;
+  padding: 0 2rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  white-space: nowrap;
+  height: 4.5rem;
+}
+
+/* 商品ページ：商品タイトルを太字に変更 */
+.product__title h1 {
+  font-weight: bold;
+}
+
+/* アナウンスメントバー：背景を濃いグレー、文字を白に変更 */
+.utility-bar {
+  background: #2A2A2A !important;
+}
+
+.utility-bar .announcement-bar__message,
+.utility-bar .announcement-bar__link,
+.utility-bar a {
+  color: #FFFFFF !important;
+}
+
+/* バナーボタン「コレクションを見る」：Figmaデザインに合わせる */
+.banner__buttons .button--primary {
+  /* オレンジ背景・白文字（Dawnのボタンは RGB変数で色を管理） */
+  --color-button: 249, 115, 22;
+  --color-button-text: 255, 255, 255;
+  padding: 18px 34px;
+  font-size: 16px;
+  line-height: 25.6px;
+  max-width: 212px;
+  letter-spacing: 0;
+}
+
+/* コレクションリスト：見出しと説明文を中央寄せ */
+.collection-list-wrapper .title-wrapper-with-link {
+  justify-content: center;
+}
+
+.collection-list-title,
+.collection-list-description {
+  text-align: center;
+}
+
+/* 注目の商品（featured collection）：見出しと説明文を中央寄せ */
+.collection__title,
+.collection__description {
+  text-align: center;
+}
+
+/* 関連商品：見出しを中央寄せ */
+.related-products__heading {
+  text-align: center;
+}
+
+/* 商品ページ：Shareボタンを非表示 */
+.product__info-container .share-button {
+  display: none;
+}
+
+/* パンくずリスト */
+.breadcrumb {
+  padding: 1.2rem 0 2rem;
+  font-size: 1.4rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+/* 商品ページ：商品エリア（パンくずの下）の上に余白 */
+.page-width > .product {
+  margin-top: 40px;
+}
+
+/* 商品ページ：価格（Figma: 32px / weight 700 / 行間51.2 / オレンジ） */
+.price--large .price-item {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 51.2px;
+  color: #F97316;
+}
+
+.breadcrumb a {
+  color: rgba(var(--color-foreground), 0.6);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb__sep {
+  margin: 0 0.6rem;
+  color: rgba(var(--color-foreground), 0.4);
+}
+
+.breadcrumb__current {
+  color: rgb(var(--color-foreground));
+}
+
+/* Wishlist Hero：右下のフローティングボタンを非表示 */
+.MuiBadge-root:has(a[aria-label="Open Wishlist"]),
+a[aria-label="Open Wishlist"] {
+  display: none !important;
+}
+
+/* 画像テキスト（image with text）：左の余白を0、右を60pxに */
+.image-with-text__content {
+  padding-left: 0 !important;
+  padding-right: 60px !important;
+}
+
+/* 画像テキスト：見出しを36pxに */
+.image-with-text__heading {
+  font-size: 36px;
+}
+
+
+/* バナー見出し「CAMPSITE PORTFOLIO」：Figmaデザインに合わせる */
+.banner__heading {
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 67.2px;
+  letter-spacing: -2px;
+}
+
+/* バナー：見出しと本文を白に */
+.banner__heading,
+.banner__text {
+  color: #ffffff;
+}
+
+/* Judge.me レビュー：ブランドカラー（オレンジ #f97316）に合わせる
+   Judge.me は CSS変数で色を制御しているので、それを上書きする */
+.jdgm-widget,
+.jdgm-all-reviews-widget,
+.jdgm-preview-badge,
+.jdgm-histogram,
+[class*="jdgm-"] {
+  --jdgm-star-color: #f97316 !important;
+  --jdgm-primary-color: #f97316 !important;
+  --jdgm-secondary-color: rgba(249, 115, 22, 0.12) !important;
+}
+
+/* 念のため直接指定でも上書き（星・レビューを書くボタン） */
+.jdgm-star.jdgm--on,
+.jdgm-star.jdgm--half {
+  color: #f97316 !important;
+}
+.jdgm-write-rev-link,
+.jdgm-all-reviews__header .jdgm-write-rev-link {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
