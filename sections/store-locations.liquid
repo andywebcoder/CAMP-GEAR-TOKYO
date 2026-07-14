@@ -31,45 +31,47 @@
     {%- endif -%}
 
     <div class="store-locations__grid">
-      {%- for block in section.blocks -%}
-        <div class="store-card" {{ block.shopify_attributes }}>
-          {%- if block.settings.image != blank -%}
-            <a href="{{ block.settings.link }}" class="store-card__media">
+      {%- assign stores = shop.metaobjects.store.values -%}
+      {%- for store in stores -%}
+        {%- assign store_url = store.system.url -%}
+        <div class="store-card">
+          {%- if store.image.value != blank -%}
+            <a href="{{ store_url }}" class="store-card__media">
               <img
-                src="{{ block.settings.image | image_url: width: 600 }}"
-                srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w"
+                src="{{ store.image.value | image_url: width: 600 }}"
+                srcset="{{ store.image.value | image_url: width: 400 }} 400w, {{ store.image.value | image_url: width: 600 }} 600w, {{ store.image.value | image_url: width: 900 }} 900w"
                 sizes="(min-width: 750px) 45vw, 90vw"
-                alt="{{ block.settings.name | escape }}"
-                width="{{ block.settings.image.width }}"
-                height="{{ block.settings.image.height }}"
+                alt="{{ store.name.value | escape }}"
+                width="{{ store.image.value.width }}"
+                height="{{ store.image.value.height }}"
                 loading="lazy"
               >
             </a>
           {%- else -%}
-            <a href="{{ block.settings.link }}" class="store-card__media store-card__media--placeholder">
+            <a href="{{ store_url }}" class="store-card__media store-card__media--placeholder">
               {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
             </a>
           {%- endif -%}
 
           <div class="store-card__body">
             <h3 class="store-card__name">
-              <a href="{{ block.settings.link }}">{{ block.settings.name | escape }}</a>
+              <a href="{{ store_url }}">{{ store.name.value | escape }}</a>
             </h3>
-            {%- if block.settings.address != blank -%}
-              <p class="store-card__address">{{ block.settings.address | escape }}</p>
+            {%- if store.address.value != blank -%}
+              <p class="store-card__address">{{ store.address.value | escape }}</p>
             {%- endif -%}
-            {%- if block.settings.phone != blank -%}
-              <p class="store-card__tel">TEL: {{ block.settings.phone | escape }}</p>
+            {%- if store.tel.value != blank -%}
+              <p class="store-card__tel">TEL: {{ store.tel.value | escape }}</p>
             {%- endif -%}
-            {%- if block.settings.hours != blank -%}
+            {%- if store.hours.value != blank -%}
               <div class="store-card__hours">
                 <p class="store-card__hours-label">営業時間</p>
-                <p class="store-card__hours-value">{{ block.settings.hours | escape | newline_to_br }}</p>
+                <p class="store-card__hours-value">{{ store.hours.value | escape | newline_to_br }}</p>
               </div>
             {%- endif -%}
-            {%- if block.settings.categories != blank -%}
+            {%- if store.categories.value != blank -%}
               <div class="store-card__tags">
-                {%- assign cats = block.settings.categories | split: ',' -%}
+                {%- assign cats = store.categories.value | split: ',' -%}
                 {%- for cat in cats -%}
                   {%- assign cat_trimmed = cat | strip -%}
                   {%- if cat_trimmed != blank -%}
@@ -78,12 +80,10 @@
                 {%- endfor -%}
               </div>
             {%- endif -%}
-            {%- if block.settings.link != blank and block.settings.link_label != blank -%}
-              <a href="{{ block.settings.link }}" class="store-card__link">
-                {{ block.settings.link_label | escape }}
-                <span class="store-card__arrow" aria-hidden="true">→</span>
-              </a>
-            {%- endif -%}
+            <a href="{{ store_url }}" class="store-card__link">
+              店舗詳細を見る
+              <span class="store-card__arrow" aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       {%- endfor -%}
