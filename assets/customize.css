@@ -724,13 +724,18 @@ a[aria-label="Open Wishlist"] {
   --jdgm-secondary-color: rgba(249, 115, 22, 0.12) !important;
 }
 
-/* 念のため直接指定でも上書き（星・レビューを書くボタン） */
+/* 直接指定でも上書き：星（jdgm-star）を全てオレンジに */
+.jdgm-star,
 .jdgm-star.jdgm--on,
-.jdgm-star.jdgm--half {
+.jdgm-star.jdgm--half,
+.jdgm-star.jdgm--off {
   color: #f97316 !important;
 }
-.jdgm-write-rev-link,
-.jdgm-all-reviews__header .jdgm-write-rev-link {
+/* 新ウィジェットのボタン（jm-button--primary＝「レビューを書く」等）をオレンジに */
+.jm-button--primary,
+.jm-action-buttons__button.jm-button--primary,
+.jdgm-write-rev-link {
   background-color: #f97316 !important;
+  border-color: #f97316 !important;
   color: #ffffff !important;
 }
