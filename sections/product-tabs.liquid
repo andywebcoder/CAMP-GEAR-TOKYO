@@ -1,0 +1,643 @@
+{%- comment -%}
+  商品タブ（Product Tabs）
+  PC: 横並びタブ切り替え / SP: アコーディオンに自動切替
+  タブ1枚 = 1ブロック。
+  本文は「固定テキスト（全商品共通）」or「商品メタフィールド（商品ごと）」を選べる。
+  レビュータブは Judge.me 連携 / ダミー表示を切り替え可能。
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.blocks.size > 0 -%}
+      <product-tabs class="product-tabs" data-section-id="{{ section.id }}">
+        {%- comment -%} PC用タブナビ {%- endcomment -%}
+        <div class="product-tabs__nav" role="tablist" aria-label="{{ section.settings.heading | default: '商品情報' | escape }}">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign tab_count = ''
+              if block.type == 'review'
+                if block.settings.show_judgeme
+                  assign tab_count = product.metafields.reviews.rating_count
+                else
+                  assign tab_count = block.settings.review_count
+                endif
+              endif
+            -%}
+            <button
+              type="button"
+              class="product-tabs__tab{% if forloop.first %} is-active{% endif %}"
+              id="ProductTab-{{ section.id }}-{{ forloop.index }}"
+              role="tab"
+              data-index="{{ forloop.index0 }}"
+              aria-controls="ProductTabPanel-{{ section.id }}-{{ forloop.index }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {{- block.settings.heading | escape -}}
+              {%- if tab_count != blank -%}
+                <span class="product-tabs__tab-count"> ({{ tab_count }})</span>
+              {%- endif -%}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} 本文（PC: パネル / SP: アコーディオン） {%- endcomment -%}
+        <div class="product-tabs__body">
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign tab_count = ''
+              if block.type == 'review'
+                if block.settings.show_judgeme
+                  assign tab_count = product.metafields.reviews.rating_count
+                else
+                  assign tab_count = block.settings.review_count
+                endif
+              endif
+            -%}
+            <div class="product-tabs__item{% if forloop.first %} is-active{% endif %}" data-index="{{ forloop.index0 }}">
+              {%- comment -%} SP用アコーディオンの見出し {%- endcomment -%}
+              <button
+                type="button"
+                class="product-tabs__accordion-header"
+                data-index="{{ forloop.index0 }}"
+                aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-controls="ProductTabPanel-{{ section.id }}-{{ forloop.index }}"
+              >
+                <span>
+                  {{- block.settings.heading | escape -}}
+                  {%- if tab_count != blank -%}
+                    <span class="product-tabs__tab-count"> ({{ tab_count }})</span>
+                  {%- endif -%}
+                </span>
+                <span class="product-tabs__accordion-icon" aria-hidden="true"></span>
+              </button>
+
+              <div
+                class="product-tabs__panel"
+                id="ProductTabPanel-{{ section.id }}-{{ forloop.index }}"
+                role="tabpanel"
+                aria-labelledby="ProductTab-{{ section.id }}-{{ forloop.index }}"
+              >
+                {%- case block.type -%}
+                  {%- when 'review' -%}
+                    {%- if block.settings.show_judgeme -%}
+                      {%- comment -%} Judge.me 商品レビューウィジェット（App embed: judgeme_core 有効が前提） {%- endcomment -%}
+                      <!-- Start of Judge.me code -->
+                      {% assign has_legacy = false %}
+                      {% if product.metafields.judgeme.widget.size > 20 %}
+                        {% assign has_legacy = true %}
+                      {% endif %}
+                      <div style='clear:both'></div>
+                      <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title | escape }}' data-id='{{ product.id }}' data-product-id='{{ product.id }}' data-widget='review' data-auto-install='false' data-shop-reviews-count='{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}' data-entry-point='review_widget.js' data-entry-key='review-widget/main.js'>
+                        {% if has_legacy %}
+                          <div class='jdgm-legacy-widget-content' style='display: none;'>{{ product.metafields.judgeme.widget }}</div>
+                        {% endif %}
+                      </div>
+                      {% if product.metafields.judgeme.review_widget_data %}
+                        <script>jdgm.data ||= {}; jdgm.data.reviewWidget ||= {}; jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }}</script>
+                      {% endif %}
+                      <!-- End of Judge.me code -->
+                    {%- else -%}
+                      {%- if block.settings.average_rating != blank -%}
+                        {%- assign full_stars = block.settings.average_rating | floor -%}
+                        <div class="product-tabs__review-summary">
+                          <div class="product-tabs__review-score">{{ block.settings.average_rating }}</div>
+                          <div>
+                            <div class="product-tabs__stars" aria-hidden="true">
+                              {%- for i in (1..5) -%}
+                                {%- if i <= full_stars -%}★{%- else -%}☆{%- endif -%}
+                              {%- endfor -%}
+                            </div>
+                            {%- if block.settings.review_count != blank -%}
+                              <div class="product-tabs__review-count">{{ block.settings.review_count }}件のレビュー</div>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
+                      <div class="product-tabs__content rte">{{ block.settings.content }}</div>
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- if block.settings.content_source == 'metafield' and block.settings.metafield != blank -%}
+                      {%- assign mf_parts = block.settings.metafield | split: '.' -%}
+                      {%- assign tab_mf = product.metafields[mf_parts[0]][mf_parts[1]] -%}
+                      {%- comment -%}
+                        動的アクセス（変数経由）したリッチテキストは自動でHTML化されず
+                        生JSONが出力されるため、metafield_tag フィルターでHTMLに変換する。
+                      {%- endcomment -%}
+                      <div class="product-tabs__content rte">{{ tab_mf | metafield_tag }}</div>
+                    {%- else -%}
+                      <div class="product-tabs__content rte">{{ block.settings.content }}</div>
+                    {%- endif -%}
+                {%- endcase -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </product-tabs>
+    {%- elsif request.design_mode -%}
+      <div class="product-tabs__placeholder">
+        タブを追加してください（テーマエディタの「ブロックを追加」から）。
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .product-tabs__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+  }
+
+  .product-tabs__tab {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 1.2rem 0.2rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: rgba(var(--color-foreground), 0.6);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .product-tabs__tab:hover {
+    color: rgb(var(--color-foreground));
+  }
+
+  .product-tabs__tab.is-active {
+    color: #f97316;
+    border-bottom-color: #f97316;
+    font-weight: 600;
+  }
+
+  .product-tabs__tab-count {
+    color: rgba(var(--color-foreground), 0.5);
+    font-weight: 400;
+  }
+
+  .product-tabs__tab.is-active .product-tabs__tab-count {
+    color: inherit;
+  }
+
+  .product-tabs__accordion-header {
+    display: none;
+  }
+
+  .product-tabs__panel {
+    display: none;
+    padding-top: 2.4rem;
+  }
+
+  .product-tabs__item.is-active .product-tabs__panel {
+    display: block;
+  }
+
+  .product-tabs__content > :first-child {
+    margin-top: 0;
+  }
+
+  .product-tabs__content > :last-child {
+    margin-bottom: 0;
+  }
+
+  .product-tabs__content h3,
+  .product-tabs__content h4 {
+    margin: 2rem 0 1rem;
+  }
+
+  .product-tabs__content ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .product-tabs__content ul li {
+    position: relative;
+    padding-left: 1.8em;
+    margin-bottom: 0.6rem;
+  }
+
+  .product-tabs__content ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231AB385' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .product-tabs__review-summary {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .product-tabs__review-score {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .product-tabs__stars {
+    color: #f5a623;
+    font-size: 1.8rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .product-tabs__review-count {
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.6);
+    margin-top: 0.3rem;
+  }
+
+  /* 商品ごとの静的レビュー表示 */
+  .product-reviews__summary {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .product-reviews__score {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .product-reviews__stars {
+    color: #f5a623;
+    font-size: 1.8rem;
+    letter-spacing: 0.2rem;
+  }
+
+  .product-reviews__stars--sm {
+    font-size: 1.4rem;
+  }
+
+  .product-reviews__count {
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.6);
+    margin-top: 0.3rem;
+  }
+
+  .product-reviews__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .product-reviews__item {
+    padding: 1.8rem 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .product-reviews__item:last-child {
+    border-bottom: none;
+  }
+
+  .product-reviews__item-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .product-reviews__name {
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+
+  .product-reviews__date {
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.5);
+  }
+
+  .product-reviews__title {
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+  }
+
+  .product-reviews__body {
+    margin: 0;
+    line-height: 1.7;
+    color: rgba(var(--color-foreground), 0.85);
+  }
+
+  .product-reviews__empty {
+    color: rgba(var(--color-foreground), 0.6);
+  }
+
+  .product-tabs__placeholder {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: rgba(var(--color-foreground), 0.6);
+    border: 1px dashed rgba(var(--color-foreground), 0.2);
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-tabs__nav {
+      display: none;
+    }
+
+    .product-tabs__item {
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.12);
+    }
+
+    .product-tabs__item:first-child {
+      border-top: 1px solid rgba(var(--color-foreground), 0.12);
+    }
+
+    .product-tabs__accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      appearance: none;
+      background: none;
+      border: none;
+      padding: 1.6rem 0.2rem;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: rgb(var(--color-foreground));
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .product-tabs__accordion-icon {
+      position: relative;
+      width: 1.4rem;
+      height: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .product-tabs__accordion-icon::before,
+    .product-tabs__accordion-icon::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgb(var(--color-foreground));
+    }
+
+    .product-tabs__accordion-icon::before {
+      width: 1.4rem;
+      height: 2px;
+    }
+
+    .product-tabs__accordion-icon::after {
+      width: 2px;
+      height: 1.4rem;
+      transition: opacity 0.15s ease;
+    }
+
+    .product-tabs__item.is-active .product-tabs__accordion-icon::after {
+      opacity: 0;
+    }
+
+    .product-tabs__panel {
+      padding-top: 0;
+      padding-bottom: 1.6rem;
+    }
+  }
+{%- endstylesheet -%}
+
+<script>
+  (function () {
+    if (customElements.get('product-tabs')) return;
+
+    class ProductTabs extends HTMLElement {
+      connectedCallback() {
+        this.tabs = Array.from(this.querySelectorAll('.product-tabs__tab'));
+        this.items = Array.from(this.querySelectorAll('.product-tabs__item'));
+        this.accordionHeaders = Array.from(this.querySelectorAll('.product-tabs__accordion-header'));
+
+        this.tabs.forEach((tab) => {
+          tab.addEventListener('click', () => this.selectTab(Number(tab.dataset.index)));
+          tab.addEventListener('keydown', (event) => this.onKeydown(event));
+        });
+
+        this.accordionHeaders.forEach((header) => {
+          header.addEventListener('click', () => this.toggleAccordion(Number(header.dataset.index)));
+        });
+
+        this.mql = window.matchMedia('(min-width: 750px)');
+        this.mql.addEventListener('change', () => this.ensureActiveOnDesktop());
+      }
+
+      selectTab(index) {
+        this.tabs.forEach((tab) => {
+          const selected = Number(tab.dataset.index) === index;
+          tab.classList.toggle('is-active', selected);
+          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+          tab.setAttribute('tabindex', selected ? '0' : '-1');
+        });
+        this.items.forEach((item) => {
+          const active = Number(item.dataset.index) === index;
+          item.classList.toggle('is-active', active);
+          const header = item.querySelector('.product-tabs__accordion-header');
+          if (header) header.setAttribute('aria-expanded', active ? 'true' : 'false');
+        });
+      }
+
+      toggleAccordion(index) {
+        const item = this.items[index];
+        if (!item) return;
+        const isActive = item.classList.toggle('is-active');
+        const header = item.querySelector('.product-tabs__accordion-header');
+        if (header) header.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        const tab = this.tabs[index];
+        if (tab && isActive) this.syncTabSelection(index);
+      }
+
+      syncTabSelection(index) {
+        this.tabs.forEach((tab) => {
+          const selected = Number(tab.dataset.index) === index;
+          tab.classList.toggle('is-active', selected);
+          tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+          tab.setAttribute('tabindex', selected ? '0' : '-1');
+        });
+      }
+
+      onKeydown(event) {
+        const current = this.tabs.findIndex((tab) => tab === document.activeElement);
+        if (current === -1) return;
+        let next = null;
+        if (event.key === 'ArrowRight') next = (current + 1) % this.tabs.length;
+        if (event.key === 'ArrowLeft') next = (current - 1 + this.tabs.length) % this.tabs.length;
+        if (next === null) return;
+        event.preventDefault();
+        this.selectTab(next);
+        this.tabs[next].focus();
+      }
+
+      ensureActiveOnDesktop() {
+        if (!this.mql.matches) return;
+        if (this.items.some((item) => item.classList.contains('is-active'))) return;
+        this.selectTab(0);
+      }
+    }
+
+    customElements.define('product-tabs', ProductTabs);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "商品タブ",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "ナビゲーションのラベル（読み上げ用）",
+      "default": "商品情報"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "カラースキーム",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "余白"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "上の余白",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "下の余白",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "タブ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "タブ名",
+          "default": "詳細情報"
+        },
+        {
+          "type": "select",
+          "id": "content_source",
+          "label": "本文の取得元",
+          "options": [
+            { "value": "text", "label": "固定テキスト（全商品共通）" },
+            { "value": "metafield", "label": "商品メタフィールド（商品ごとに変わる）" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "metafield",
+          "label": "メタフィールド（例: custom.tab_details）",
+          "info": "「商品メタフィールド」を選んだ場合に使用。namespace.key の形式で入力します。"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "本文（固定テキスト用）"
+        }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "レビュータブ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "タブ名",
+          "default": "レビュー"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_judgeme",
+          "label": "Judge.meの本物のレビューを表示",
+          "info": "ONでJudge.meのレビューウィジェットを表示します。OFFにすると下のダミー設定を使います。",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "ダミー表示用の設定（Judge.meをOFFにした場合のみ使用）"
+        },
+        {
+          "type": "text",
+          "id": "average_rating",
+          "label": "平均評価（例: 4.5）",
+          "default": "4.5"
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "レビュー件数（例: 124）",
+          "default": "124"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "レビュー本文"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "商品タブ",
+      "blocks": [
+        { "type": "tab" },
+        { "type": "tab", "settings": { "heading": "スペック" } },
+        { "type": "review" },
+        { "type": "tab", "settings": { "heading": "配送・返品" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
