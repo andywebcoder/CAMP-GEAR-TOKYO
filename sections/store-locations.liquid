@@ -33,8 +33,8 @@
     <div class="store-locations__grid">
       {%- assign stores = shop.metaobjects.store.values -%}
       {%- for store in stores -%}
-        {%- assign store_url = store.system.url -%}
-        {%- if store_url == blank -%}{%- assign store_url = '/pages/store/' | append: store.system.handle -%}{%- endif -%}
+        {%- comment -%} store.system.url がこのストアでは誤って /pages/store-detail を返すため、ハンドルから実URLを組み立てる {%- endcomment -%}
+        {%- assign store_url = '/pages/store/' | append: store.system.handle -%}
         <div class="store-card">
           {%- if store.image.value != blank -%}
             <a href="{{ store_url }}" class="store-card__media">
