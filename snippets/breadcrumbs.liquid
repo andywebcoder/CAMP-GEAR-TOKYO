@@ -1,0 +1,26 @@
+{%- comment -%}
+  パンくずリスト（ホーム / コレクション / 商品名）
+  - collection（コレクション経由のURL）が無い場合は商品の最初のコレクションを使用
+{%- endcomment -%}
+<nav class="breadcrumb" role="navigation" aria-label="パンくずリスト">
+  <a href="{{ routes.root_url }}">ホーム</a>
+
+  {%- comment -%} コレクション経由ならそれを、無ければ frontpage以外の最初のコレクションを使う {%- endcomment -%}
+  {%- assign crumb_collection = collection -%}
+  {%- unless crumb_collection -%}
+    {%- for c in product.collections -%}
+      {%- unless c.handle == 'frontpage' -%}
+        {%- assign crumb_collection = c -%}
+        {%- break -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endunless -%}
+
+  {%- if crumb_collection.url -%}
+    <span class="breadcrumb__sep" aria-hidden="true">/</span>
+    <a href="{{ crumb_collection.url }}">{{ crumb_collection.title }}</a>
+  {%- endif -%}
+
+  <span class="breadcrumb__sep" aria-hidden="true">/</span>
+  <span class="breadcrumb__current" aria-current="page">{{ product.title }}</span>
+</nav>

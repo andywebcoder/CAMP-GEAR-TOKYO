@@ -1,0 +1,17 @@
+{%- comment -%}
+  フィルター名（絞り込みの見出し）を日本語に変換して出力する。
+  Search & discovery アプリを使わずに、テーマ側で表示名だけを差し替える目的。
+  新しく日本語化したいフィルターがあれば when を追加する。
+
+  使い方: {% render 'facet-label', filter: filter %}
+{%- endcomment -%}
+{%- liquid
+  assign facet_label = filter.label
+  case filter.label
+    when 'Availability'
+      assign facet_label = '在庫状況'
+    when 'Price'
+      assign facet_label = '価格'
+  endcase
+  echo facet_label | escape
+-%}
