@@ -1,10 +1,27 @@
 {%- comment -%}
-  店舗詳細（メタオブジェクト「店舗情報」用）
-  metaobject テンプレート（templates/metaobject.store.json）で使用。現在の店舗は {{ metaobject }}。
+  店舗詳細（メタオブジェクト「店舗情報」連動）
+  2通りの文脈で動作:
+    1. metaobjectテンプレート内 … {{ metaobject }} が現在の店舗
+    2. /pages/store/{ハンドル} … request.path のハンドルから店舗を特定（/pages/store が全サブパスを受けるのを利用）
+  該当店舗が特定できた時だけ描画（一覧ページ /pages/store では何も出さない）。
   レイアウト: パンくず / ヒーロー / 店舗情報（左・連動）＋店舗の特徴（右・設定） / アクセス（下・連動）
 {%- endcomment -%}
 
-{%- assign store = metaobject -%}
+{%- assign store = blank -%}
+{%- if metaobject != blank -%}
+  {%- assign store = metaobject -%}
+{%- else -%}
+  {%- assign _parts = request.path | split: '/' -%}
+  {%- assign _handle = '' -%}
+  {%- if _parts.size > 3 -%}{%- assign _handle = _parts[3] -%}{%- endif -%}
+  {%- if _handle != blank -%}
+    {%- for s in shop.metaobjects.store.values -%}
+      {%- if s.system.handle == _handle -%}{%- assign store = s -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if store != blank -%}
 
 {%- style -%}
   .section-{{ section.id }}-padding { padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px; }
@@ -123,6 +140,8 @@
     </div>
   </div>
 </div>
+
+{%- endif -%}
 
 {%- stylesheet -%}
   .store-detail__crumbs {

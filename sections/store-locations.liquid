@@ -17,6 +17,11 @@
   }
 {%- endstyle -%}
 
+{%- comment -%} /pages/store/{ハンドル}（詳細）ではこの一覧を出さない {%- endcomment -%}
+{%- assign _lparts = request.path | split: '/' -%}
+{%- assign _lhandle = '' -%}
+{%- if _lparts.size > 3 -%}{%- assign _lhandle = _lparts[3] -%}{%- endif -%}
+{%- if _lhandle == blank -%}
 <div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   <div class="page-width">
     {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
@@ -94,6 +99,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 {%- stylesheet -%}
   .store-locations__head {
