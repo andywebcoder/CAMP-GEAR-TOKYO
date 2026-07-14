@@ -724,7 +724,9 @@ a[aria-label="Open Wishlist"] {
   --jdgm-secondary-color: rgba(249, 115, 22, 0.12) !important;
 }
 
-/* 直接指定でも上書き：星（jdgm-star）を全てオレンジに */
+/* 直接指定でも上書き：星をオレンジに（新ウィジェットはフォントアイコン .jm-star-rating__font-icon） */
+.jm-star-rating__font-icon,
+.jm-star-rating .jm-star-rating__font-icon,
 .jdgm-star,
 .jdgm-star.jdgm--on,
 .jdgm-star.jdgm--half,
